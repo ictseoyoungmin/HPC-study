@@ -2,6 +2,22 @@
 
 프로젝트 내부 구현 기록이다. 사용자-facing 소개와 작업 로그를 분리하기 위해 루트 README에는 상세 변경 이력을 두지 않는다.
 
+## 2026-10-05 · System / OS textbook quality pass v2
+
+- `System / OS` 8개 챕터를 `learningObjectives / terms / sections / example / selfCheck` 구조의 설명형 교재로 재작성했다.
+- Process·Thread·Signal·FD·ulimit 챕터에서 process/thread 공유 경계, R/S/D/Z 상태, signal 종료 방식, file descriptor와 resource limit을 진단 흐름으로 연결했다.
+- Linux scheduler·cgroup·namespace·systemd 챕터에서 Slurm allocation과 kernel scheduling, cgroup 집행, container view와 host service state를 구분했다.
+- Virtual memory 챕터에서 VmSize/RSS, minor-major fault, reclaim/swap, system/cgroup OOM을 하나의 원인 흐름으로 설명했다.
+- CPU topology, microarchitecture, cache/coherence, NUMA, frequency/power 챕터의 용어 정의와 원인-결과 설명을 보강했다.
+- `process-signals`와 `os-control`에 Canvas text가 아닌 DOM 기반 concept-map viewer를 추가했다.
+- CPU topology viewer는 topology / SMT / binding을 서로 다른 레이아웃으로 분리해 작은 Core box 안의 과도한 label을 줄였다.
+- Cache viewer는 coherence line crossing을 줄이고 wide/narrow layout을 분리했다.
+- Virtual memory viewer는 virtual-page → page-table → physical-frame 경로와 pressure flow를 직교 connector 중심으로 재작성했다.
+- NUMA viewer는 desktop side-by-side와 narrow stacked layout을 분리하고 remote path를 직교 경로로 단순화했다.
+- `system-os-v2.css`를 추가해 process tree, task state, cgroup, namespace/service viewer의 text wrapping과 mobile stacking을 DOM layout으로 처리한다.
+- System / OS stage도 Foundation과 동일한 rich-schema 품질 조건을 CI에서 강제한다.
+- System / OS 8개 챕터를 source registry의 Linux Kernel, Red Hat, Intel 등 기존 공식 reference에 연결했다.
+
 ## 2026-10-05 · Foundation textbook quality pass v2
 
 - 기능 확장보다 교재 완성도를 우선하도록 roadmap을 재정렬하고 `CONTENT-QUALITY.md`에 editorial/visual 기준을 정의했다.
