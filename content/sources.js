@@ -180,7 +180,15 @@ export const chapterReferences = Object.freeze({
   "runbook-slow": ["linux-kernel", "linux-man-pages", "slurm", "openmpi"],
   "runbook-oom": ["linux-kernel", "slurm", "redhat-docs"],
   "runbook-io-mpi": ["linux-kernel", "openmpi", "mpi-forum", "slurm"],
-  "runbook-gpu": ["nvidia-cuda", "amd-rocm", "slurm"]
+  "runbook-gpu": ["nvidia-cuda", "amd-rocm", "slurm"],
+
+  "workloads": ["openmp-spec", "mpi-forum", "openmpi", "nvidia-cuda", "amd-rocm"],
+  "capacity": ["slurm", "openhpc"],
+  "regression": ["linux-kernel", "slurm", "openmpi", "nvidia-cuda", "amd-rocm", "intel-sdm"],
+  "ticket-postmortem": ["slurm", "linux-man-pages", "redhat-docs"],
+  "roadmap": ["linux-man-pages", "slurm", "openmpi", "openmp-spec", "nvidia-cuda"],
+  "selftest": ["linux-man-pages", "slurm", "openmpi", "nvidia-cuda"],
+  "reference": ["linux-kernel", "linux-man-pages", "slurm", "mpi-forum", "openmpi", "mpich", "openmp-spec", "gcc-docs", "lmod-docs", "nvidia-cuda", "amd-rocm", "openhpc", "redhat-docs"]
 });
 
 export function sourcesForChapter(chapterId) {
