@@ -5,7 +5,10 @@
 - `ARCHITECTURE.md` — 코드 책임, 확장 규칙, visualization 구조
 - `CONTENT-QUALITY.md` — 교재 본문·용어·실습·시각화의 품질 기준
 - `ROADMAP.md` — 진행 중인 작업과 다음 우선순위
-- `CHANGELOG.md` — 구현 단위의 변경 기록
+- `CHANGELOG.md` — 완료된 구현의 짧은 요약
+- `logs/` — 큰 작업 단위의 상세 구현 로그와 검수 메모
+
+`CHANGELOG.md`는 release-note 성격의 요약만 유지하고, 긴 작업 기록·설계 판단·남은 QA 항목은 `logs/YYYY-MM-DD-<topic>.md`에 둡니다. 이렇게 하면 루트 README와 CHANGELOG가 작업 일지로 비대해지는 것을 막을 수 있습니다.
 
 라이선스와 외부 reference 정책은 사용자·기여자 모두가 쉽게 찾을 수 있도록 `docs/` 바로 아래에 둡니다.
 
