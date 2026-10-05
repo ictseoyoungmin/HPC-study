@@ -3,7 +3,7 @@ import { visualizationIds } from "../assets/js/visualizations/index.js";
 
 const required = ["id","stage","title","en","level","minutes","env","why","concepts","commands","lab","mistakes","troubleshoot","keywords"];
 const qualityRequired = ["learningObjectives","terms","sections","selfCheck"];
-const qualityStages = new Set(["Foundation", "System / OS"]);
+const qualityStages = new Set(["Foundation", "System / OS", "Parallel / Cluster"]);
 const errors = [];
 const ids = new Set();
 
@@ -52,7 +52,12 @@ for (const id of visualizationIds) {
   if (!ids.has(id)) errors.push(`Visualization points to missing chapter: ${id}`);
 }
 
-for (const id of ["hpc-aa-role","cluster-architecture","process-signals","os-control","cpu-topology","cache-coherence","virtual-memory","numa","mpi-basics","network-basics","rdma-interconnect","network-benchmark","storage-stack","parallel-filesystems","scientific-io","slurm-basics","scaling","strong-weak","gpu-basics","gpu-memory","multi-gpu"]) {
+for (const id of [
+  "hpc-aa-role","cluster-architecture",
+  "process-signals","os-control","cpu-topology","cache-coherence","virtual-memory","numa",
+  "pthreads-openmp","openmp-advanced","hybrid","mpi-basics","network-basics","rdma-interconnect","network-benchmark","storage-stack","parallel-filesystems","scientific-io","slurm-basics",
+  "scaling","strong-weak","gpu-basics","gpu-memory","multi-gpu"
+]) {
   if (!visualizationIds.includes(id)) errors.push(`Required teaching visualization missing: ${id}`);
 }
 
@@ -60,4 +65,4 @@ if (errors.length) {
   console.error(errors.join("\n"));
   process.exit(1);
 }
-console.log(`Content OK: ${chapters.length} chapters, ${visualizationIds.length} visualization routes`);
+console.log(`Content OK: ${chapters.length} chapters, ${visualizationIds.length} visualization routes; quality stages=${[...qualityStages].join(", ")}`);
