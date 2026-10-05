@@ -91,10 +91,16 @@ export const chapterReferences = Object.freeze({
   "linux-files": ["linux-kernel", "redhat-docs"],
   "shell-text": ["redhat-docs"],
   "ssh-transfer": ["redhat-docs"],
-  "cpu-topology": ["linux-kernel", "intel-sdm", "amd-rocm"],
-  "cache-coherence": ["linux-kernel", "intel-sdm"],
+
+  "process-signals": ["linux-kernel", "redhat-docs"],
+  "os-control": ["linux-kernel", "redhat-docs"],
   "virtual-memory": ["linux-kernel", "redhat-docs"],
+  "cpu-topology": ["linux-kernel", "intel-sdm", "amd-rocm"],
+  "microarchitecture": ["linux-kernel", "intel-sdm"],
+  "cache-coherence": ["linux-kernel", "intel-sdm"],
   "numa": ["linux-kernel", "intel-sdm"],
+  "frequency-power": ["linux-kernel", "intel-sdm", "redhat-docs"],
+
   "mpi-basics": ["mpi-forum", "openmpi", "mpich"],
   "mpi-advanced": ["mpi-forum", "openmpi", "mpich"],
   "network-basics": ["linux-kernel", "openhpc"],
