@@ -2,7 +2,7 @@ import { readFile, readdir, access } from "node:fs/promises";
 import { dirname, extname, join, relative, resolve } from "node:path";
 
 const root = process.cwd();
-const jsRoot = join(root, "assets", "js");
+const roots = [join(root, "assets", "js"), join(root, "content")];
 const files = [];
 const errors = [];
 
@@ -13,7 +13,7 @@ async function walk(dir) {
     else if (extname(path) === ".js") files.push(path);
   }
 }
-await walk(jsRoot);
+for (const dir of roots) await walk(dir);
 
 for (const file of files) {
   const source = await readFile(file, "utf8");

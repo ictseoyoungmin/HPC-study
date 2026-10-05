@@ -1,13 +1,14 @@
-import { chapters, stageOrder, stageLabels } from "./content/index.js";
+import { chapters, stageOrder, stageLabels } from "./core/curriculum.js";
 import { initTheme } from "./core/theme.js";
 import { state, setLast, isCompleted, toggleCompleted, completedCount } from "./core/state.js";
 import { hasVisualization, mountVisualization } from "./visualizations/index.js";
+import { sourcesForChapter } from "../../content/sources.js";
 
 const app = document.querySelector("#app");
 let cleanupVisualization = null;
 let searchQuery = "";
 
-const esc = value => String(value ?? "").replace(/[&<>"]/g, ch => ({
+const esc = value => String(value ?? "").replace(/[&<>\"]/g, ch => ({
   "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"
 }[ch]));
 
@@ -152,6 +153,19 @@ function mistakesHtml(chapter) {
     </section>`;
 }
 
+function referencesHtml(chapter) {
+  const refs = sourcesForChapter(chapter.id);
+  if (!refs.length) return "";
+  return `
+    <section class="lesson references">
+      <h2>References</h2>
+      <p class="section-intro">이 챕터의 기술적 사실과 용어를 확인할 때 사용한 주요 공식 자료다. 링크 표시는 원문·그림·코드의 재사용 허가를 의미하지 않는다.</p>
+      <ul class="plain-list references-list">
+        ${refs.map(ref => `<li><a href="${esc(ref.url)}" target="_blank" rel="noopener noreferrer">${esc(ref.title)}</a><span> · ${esc(ref.publisher)}</span></li>`).join("")}
+      </ul>
+    </section>`;
+}
+
 async function renderChapter(id) {
   const chapter = chapters.find(ch => ch.id === id) || chapters[0];
   const i = chapters.indexOf(chapter);
@@ -187,6 +201,7 @@ async function renderChapter(id) {
     ${commandsHtml(chapter)}
     ${labHtml(chapter)}
     ${mistakesHtml(chapter)}
+    ${referencesHtml(chapter)}
 
     <footer class="pager">
       ${prev ? `<button class="pager-btn" data-chapter="${esc(prev.id)}"><small>이전</small><span>${esc(prev.title)}</span></button>` : `<span></span>`}

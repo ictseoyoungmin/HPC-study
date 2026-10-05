@@ -13,10 +13,18 @@ web application and visualization code.
 
 The canonical notices are `LICENSE-CONTENT` and `LICENSE-CODE`.
 
-The current content modules contain educational text inside JavaScript data
-objects. In those mixed files, the educational text/data remains CC BY 4.0 while
-the surrounding program logic is MIT. A future content-storage migration may
-make this boundary physical as well as legal.
+The boundary is now physical as well as legal:
+
+- `content/**` contains educational chapter data and reference metadata and is
+  licensed under CC BY 4.0 unless a file states otherwise.
+- `assets/js/**`, `assets/css/**`, and `scripts/**` contain application,
+  visualization, styling, and validation code and are licensed under MIT.
+- `assets/third-party/**` is reserved for material that retains an upstream
+  license.
+
+The chapter files currently use JavaScript module syntax as a static-data
+container. That syntax does not change the licensing boundary: the educational
+material under `content/` is governed by `LICENSE-CONTENT`.
 
 ## Reference-first rule
 
@@ -60,24 +68,8 @@ are copyleft; some vendor documentation is proprietary or subject to website or
 SDK terms. Therefore HPC Study does **not** assume that a reference document can
 be relicensed under CC BY 4.0.
 
-Examples recorded in `docs/SOURCES.md` include:
-
-- Linux kernel source/documentation: kernel-wide GPL-2.0-only framework with
-  per-file SPDX identifiers that may differ.
-- Slurm code and documentation: GNU GPL v2 or later according to upstream
-  `COPYING`.
-- Open MPI: Open MPI BSD 3-clause variant.
-- MPICH: upstream permissive COPYRIGHT notice with attribution/notice terms.
-- AMD ROCm top-level documentation repository: MIT.
-- OpenHPC repository: Apache-2.0.
-- Red Hat documentation: generally CC BY-SA 3.0 except where a document says
-  otherwise.
-- NVIDIA CUDA documentation: governed by NVIDIA SDK/documentation terms; treat
-  as reference-only unless a specific item grants broader reuse rights.
-- Intel documents: Intel website/document terms restrict redistribution and
-  modification; treat as reference-only unless the specific material grants a
-  broader license.
-
+Examples recorded in `docs/SOURCES.md` include Linux Kernel, MPI Forum, Open MPI,
+MPICH, Slurm, NVIDIA CUDA, AMD ROCm, Intel, OpenHPC, and Red Hat documentation.
 These notes are operational guidance, not legal advice. Before copying or
 adapting third-party material, verify the license on the exact file/document and
 version being used.

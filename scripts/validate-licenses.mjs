@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { chapters } from "../assets/js/content/index.js";
-import { sources, chapterReferences } from "../assets/js/content/sources.js";
+import { chapters } from "../assets/js/core/curriculum.js";
+import { sources, chapterReferences } from "../content/sources.js";
 
 const requiredFiles = [
   "LICENSE-CODE",
@@ -10,13 +10,21 @@ const requiredFiles = [
   "CONTRIBUTING.md",
   "docs/LICENSING.md",
   "docs/SOURCES.md",
-  "assets/third-party/README.md"
+  "assets/third-party/README.md",
+  "content/README.md"
 ];
 
 const errors = [];
 for (const file of requiredFiles) {
   if (!fs.existsSync(path.resolve(file))) errors.push(`Missing licensing file: ${file}`);
 }
+
+if (fs.existsSync(path.resolve("assets/js/content"))) {
+  errors.push("Educational content must not live under assets/js/content; use content/chapters instead");
+}
+const chapterDir = path.resolve("content/chapters");
+if (!fs.existsSync(chapterDir)) errors.push("Missing content/chapters directory");
+else if (!fs.readdirSync(chapterDir).some(name => name.endsWith(".js"))) errors.push("content/chapters has no chapter modules");
 
 const chapterIds = new Set(chapters.map(ch => ch.id));
 for (const [id, source] of Object.entries(sources)) {
@@ -47,4 +55,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Licensing OK: ${Object.keys(sources).length} sources, ${Object.keys(chapterReferences).length} chapter reference maps`);
+console.log(`Licensing OK: ${Object.keys(sources).length} sources, ${Object.keys(chapterReferences).length} chapter reference maps; content/code boundary enforced`);

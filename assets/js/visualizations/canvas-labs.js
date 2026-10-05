@@ -7,6 +7,7 @@ import { mountStrongWeak } from "./strong-weak.js";
 import { mountCacheCoherence } from "./cache-coherence.js";
 import { mountVirtualMemory } from "./virtual-memory.js";
 import { mountNetworkRdma } from "./network-rdma.js";
+import { mountStorageStack } from "./storage-stack.js";
 import { mountParallelFilesystem } from "./parallel-filesystem.js";
 import { mountGpuNccl } from "./gpu-nccl.js";
 import { mountRoofline } from "./roofline.js";
@@ -20,6 +21,7 @@ const mounts = {
   "mpi-advanced": mountMpi,
   "network-basics": host => mountNetworkRdma(host, "tcp"),
   "rdma-interconnect": host => mountNetworkRdma(host, "rdma"),
+  "storage-stack": mountStorageStack,
   "parallel-filesystems": mountParallelFilesystem,
   "slurm-basics": mountScheduler,
   "slurm-resources": mountScheduler,

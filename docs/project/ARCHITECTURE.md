@@ -8,22 +8,27 @@ HPC Study는 챕터 수와 시각화 수가 계속 늘어나는 것을 전제로
 
 ```text
 index.html
-└─ assets/js/main.js             routing / page rendering
-   ├─ content/                   62-chapter curriculum data
-   ├─ core/                      theme / persisted learning state
+├─ content/                      CC BY 4.0 educational data
+│  ├─ chapters/                  62-chapter curriculum modules
+│  └─ sources.js                 source registry / chapter references
+└─ assets/js/                    MIT application code
+   ├─ main.js                    routing / page rendering
+   ├─ core/                      theme / state / curriculum assembly
    └─ visualizations/            concept-specific viewers
 ```
 
 ### Content
 
-`assets/js/content/`의 챕터 객체가 교재의 source of truth다. 각 챕터는 최소한 다음 schema를 유지한다.
+`content/chapters/`의 챕터 객체가 교재의 source of truth다. 각 챕터는 최소한 다음 schema를 유지한다.
 
 ```text
 id / stage / title / en / level / minutes / env
 why / concepts / commands / lab / mistakes / troubleshoot / keywords
 ```
 
-Navigation, progress, pagination은 chapter array에서 자동 파생한다.
+`assets/js/core/curriculum.js`는 content module을 순서대로 조립할 뿐 교재 문장을 보유하지 않는다. Navigation, progress, pagination은 최종 chapter array에서 자동 파생한다.
+
+`content/sources.js`는 외부 reference의 canonical registry와 chapter→source mapping을 관리한다. 페이지의 References는 이 데이터에서 자동 생성한다.
 
 ### Visualization registry
 
@@ -37,6 +42,7 @@ virtual-memory.js        translation / faults / pressure
 numa.js                  local / remote / first-touch
 mpi.js                   P2P / broadcast / allreduce
 network-rdma.js          TCP / RDMA / UCX-libfabric
+storage-stack.js         page cache / filesystem / block / device / shared FS
 parallel-filesystem.js   metadata / striping / small files
 slurm.js                 job lifecycle / resource allocation
 resource-scaling.js      scale up/down/out/in
@@ -53,11 +59,20 @@ CSS와 Canvas는 semantic token을 공유한다. Canvas 코드에서 Light/Dark 
 
 ## 새 챕터 추가
 
-1. 해당 stage의 content module에 chapter object를 추가한다.
-2. 시각화가 필요하면 독립 module을 작성한다.
-3. `canvas-labs.js` registry에 chapter id를 연결한다.
-4. `scripts/validate-content.mjs`의 required visualization 목록은 핵심 학습 viewer를 보장할 필요가 있을 때만 갱신한다.
-5. `npm run ci`를 통과시킨다.
+1. 해당 stage의 `content/chapters/` module에 chapter object를 추가한다.
+2. 필요하면 `content/sources.js`에 source mapping을 추가한다.
+3. 시각화가 필요하면 `assets/js/visualizations/`에 독립 module을 작성한다.
+4. `canvas-labs.js` registry에 chapter id를 연결한다.
+5. 핵심 viewer라면 `scripts/validate-content.mjs`의 required visualization 목록을 갱신한다.
+6. `npm run ci`를 통과시킨다.
+
+## 라이선스 경계
+
+- `content/**` → CC BY 4.0
+- `assets/js/**`, `assets/css/**`, `scripts/**` → MIT
+- `assets/third-party/**` → upstream license
+
+CI는 교재 파일이 다시 `assets/js/content/` 아래로 들어가는 것을 실패로 처리해 이 경계를 유지한다.
 
 ## 시각화 설계 원칙
 

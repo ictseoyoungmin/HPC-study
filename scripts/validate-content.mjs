@@ -1,4 +1,4 @@
-import { chapters, stageOrder } from "../assets/js/content/index.js";
+import { chapters, stageOrder } from "../assets/js/core/curriculum.js";
 import { visualizationIds } from "../assets/js/visualizations/index.js";
 
 const required = ["id","stage","title","en","level","minutes","env","why","concepts","commands","lab","mistakes","troubleshoot","keywords"];
@@ -29,7 +29,7 @@ for (const id of visualizationIds) {
   if (!ids.has(id)) errors.push(`Visualization points to missing chapter: ${id}`);
 }
 
-for (const id of ["cluster-architecture","cpu-topology","cache-coherence","virtual-memory","numa","mpi-basics","network-basics","rdma-interconnect","parallel-filesystems","slurm-basics","scaling","strong-weak","gpu-basics","gpu-memory","multi-gpu"]) {
+for (const id of ["cluster-architecture","cpu-topology","cache-coherence","virtual-memory","numa","mpi-basics","network-basics","rdma-interconnect","storage-stack","parallel-filesystems","slurm-basics","scaling","strong-weak","gpu-basics","gpu-memory","multi-gpu"]) {
   if (!visualizationIds.includes(id)) errors.push(`Required teaching visualization missing: ${id}`);
 }
 

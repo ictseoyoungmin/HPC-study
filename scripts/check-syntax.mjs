@@ -3,7 +3,7 @@ import { extname, join, relative } from "node:path";
 import { spawnSync } from "node:child_process";
 
 const root = process.cwd();
-const targets = [join(root, "assets", "js"), join(root, "scripts")];
+const targets = [join(root, "assets", "js"), join(root, "content"), join(root, "scripts")];
 const files = [];
 
 async function walk(dir) {
