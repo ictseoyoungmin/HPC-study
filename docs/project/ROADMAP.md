@@ -2,151 +2,59 @@
 
 ## 현재 기준
 
-62개 챕터 curriculum, navigation/search/pagination, Light/Dark theme, 학습 상태 저장, GitHub Pages, CI가 동작한다. 교재 콘텐츠와 코드의 이중 라이선스, source registry, chapter reference 표시, 물리적 content/code 디렉터리 경계도 적용되어 있다.
+HPC Study는 62개 chapter / 7개 stage curriculum, navigation/search/pagination, Light/Dark theme, 학습 상태 저장, GitHub Pages, CI, content/code 이중 라이선스, source registry와 chapter References를 갖춘 정적 교재다.
 
-기능 범위를 더 넓히기보다 **처음부터 읽었을 때 실제 교재로 학습 가능한가**를 우선 기준으로 전환했다. 상세 기준은 `CONTENT-QUALITY.md`에 둔다.
+2026-10-05 기준으로 **7개 stage 모두 Content & Visualization Quality Pass v2의 1차 content pass를 완료**했다. 모든 stage가 `learningObjectives / terms / sections / example / selfCheck` 구조를 사용하고 CI가 최소 품질 schema를 강제한다.
 
-## Phase 1 · 핵심 구조 시각화 — 완료
+완료된 구현 상세는 `CHANGELOG.md`와 `logs/`에 둔다. 이 문서는 아직 남은 일과 우선순위만 관리한다.
 
-- [x] Cluster hierarchy
-- [x] CPU topology / SMT / binding
-- [x] NUMA locality / first-touch
-- [x] MPI communication
-- [x] Slurm lifecycle
-- [x] Resource scaling / Strong-Weak-Amdahl 분리
+## Phase 4 · Quality Pass v2 — content pass 완료 / visual QA 남음
 
-## Phase 2 · Memory / Fabric / Storage / Accelerator — 완료
+- [ ] Foundation: 360 / 768 / desktop 실제 브라우저 visual QA
+- [ ] System / OS: CPU topology / cache / virtual memory / NUMA collision·spacing QA
+- [ ] Parallel / Cluster: MPI / network / filesystem connector·spacing QA
+- [ ] Performance: curve label / workflow spacing QA
+- [ ] Accelerator: timeline bar / card spacing QA
+- [ ] Operations / RCA: evidence lane / runbook card spacing QA
+- [ ] Expert Practice: signature / roadmap / authority stack spacing QA
+- [ ] 전체 stage에서 keyboard focus, tab order, button label, reduced-motion 대응 검토
 
-- [x] Cache hierarchy / coherence / false sharing
-- [x] Virtual memory / minor-major fault / pressure-OOM
-- [x] TCP data path / RDMA / UCX-libfabric
-- [x] Parallel filesystem metadata / striping / small-file storm
-- [x] GPU execution / data movement
-- [x] NCCL topology / GPUDirect RDMA
+## Phase 5 · I/O / Diagnostics teaching pass — 완료
 
-## Phase 3 · Source / licensing governance — 완료
+- [x] Linux storage stack
+- [x] Scientific I/O / MPI-IO / staging
+- [x] Network benchmark curve와 topology 비교
+- [x] GPU profiling timeline과 hot-kernel drill-down
+- [x] Slurm RCA evidence timeline
+- [x] CPU-memory-network-storage-GPU monitoring correlation
 
-- [x] Content CC BY 4.0 / code MIT 경계 정의
-- [x] `NOTICE.md`와 third-party asset policy
-- [x] 주요 공식 문서 license/terms 조사와 `docs/SOURCES.md`
-- [x] chapter→source registry와 페이지 하단 References
-- [x] CI licensing/source metadata 검사
-- [x] 교육 콘텐츠를 `content/`로 이동해 코드/콘텐츠 라이선스 경계를 물리적으로 분리
+## Phase 6 · 교재 운영 품질 — 다음 우선순위
 
-## Phase 4 · Content & Visualization Quality Pass v2 — 최우선 진행 중
+- [ ] Linux command 결과 예시를 `command → representative output → 관찰 포인트 → 다음 분기`로 연결
+- [ ] 용어 glossary를 중앙 registry로 만들고 first-use 정의와 chapter 간 교차 링크 연결
+- [ ] chapter 완료율과 stage별 학습 진행 요약 강화
+- [ ] Quality Pass 완료 chapter의 editorial review checklist를 CI에서 가능한 범위까지 자동화
+- [ ] visual QA용 viewport checklist와 수동 검수 기록 형식 정의
+- [ ] source/reference dead-link와 누락 metadata 정기 검사 방식 검토
 
-### Foundation — 1차 완료
+## Phase 7 · 실행형 프로그래밍 학습
 
-- [x] `HPC와 Application Analyst의 역할` 설명형 본문 / 용어 / self-check 재작성
-- [x] `클러스터 구조와 서비스 경로` 설명형 본문 재작성
-- [x] Linux 파일·권한·ACL 챕터 재작성
-- [x] Shell·환경변수·텍스트 처리 챕터 재작성
-- [x] SSH·SCP·rsync 챕터 재작성
-- [x] `learningObjectives / terms / sections / selfCheck` rich schema와 renderer 추가
-- [x] Foundation rich schema CI 검증
-- [x] 첫 장에 text-safe DOM system map 추가
-- [x] Cluster 3D의 all-to-all 연결선을 central fabric hub 구조로 교체
-- [ ] Foundation 모바일 360 px / 768 px 레이아웃 실제 시각 검수 및 미세 조정
+- [ ] C 기본 build/run code lesson 추가
+- [ ] OpenMP: serial → parallel for → schedule/binding 예제
+- [ ] MPI: hello/rank → point-to-point → collective → nonblocking 예제
+- [ ] Hybrid MPI+OpenMP placement 실습
+- [ ] Python 기반 benchmark/result parsing 예제
+- [ ] Slurm batch script를 source → submit → output → accounting 흐름으로 연결
+- [ ] source code, build command, run command, output, interpretation을 공통 code-block abstraction으로 표시
 
-### System / OS — 1차 완료
+## Phase 8 · 운영형 실습과 평가
 
-- [x] Process / Thread / Signal / FD / ulimit 설명형 본문 재작성
-- [x] Linux scheduler / cgroup / namespace / systemd 설명형 본문 재작성
-- [x] Virtual memory / page fault / swap / OOM 설명형 본문 재작성
-- [x] CPU topology / SMT / binding 설명형 본문 재작성
-- [x] Pipeline / IPC / branch / vectorization 설명형 본문 재작성
-- [x] Cache / coherence / false sharing 설명형 본문 재작성
-- [x] NUMA / first-touch / memory placement 설명형 본문 재작성
-- [x] Frequency / turbo / power-state 설명형 본문 재작성
-- [x] System / OS rich schema를 CI 품질 기준에 포함
-- [x] Process model과 OS control path를 text-safe DOM viewer로 추가
-- [x] CPU topology / cache / virtual memory / NUMA viewer의 connector·responsive layout 코드 1차 정리
-- [ ] System / OS 실제 브라우저 visual QA: 360 / 768 / desktop에서 collision·spacing 미세 조정
-
-### Parallel / Cluster — 1차 완료
-
-- [x] Pthreads/OpenMP와 advanced scheduling/task/affinity 설명형 본문 재작성
-- [x] MPI fundamentals / nonblocking / RMA / topology 설명형 본문 재작성
-- [x] Hybrid MPI+OpenMP placement / NUMA / thread-level 설명형 본문 재작성
-- [x] TCP/IP / RDMA / UCX-libfabric / network benchmark 설명형 본문 재작성
-- [x] Linux storage / parallel filesystem / scientific I/O 설명형 본문 재작성
-- [x] Compiler / linking / sanitizer-build / Modules-Lmod 설명형 본문 재작성
-- [x] Slurm fundamentals / resources / scheduling policy / advanced workflow 설명형 본문 재작성
-- [x] 19개 Parallel / Cluster chapter에 objectives / 5+ terms / 3+ sections / worked example / self-check 적용
-- [x] Parallel / Cluster stage를 CI rich-schema 품질 기준에 포함
-- [x] OpenMP / scheduling / hybrid placement를 text-safe DOM viewer로 추가
-- [x] MPI broadcast의 root-to-all 선을 tree view로, allreduce는 non-crossing ring으로 재설계
-- [x] Parallel filesystem striping을 1:1 extent→target connector로 바꾸고 small-file metadata queue를 별도 시각화
-- [x] TCP/RDMA viewer에 narrow-screen vertical data path 추가
-- [ ] Parallel / Cluster 실제 브라우저 visual QA: 360 / 768 / desktop에서 collision·spacing 미세 조정
-
-### Performance — 1차 완료
-
-- [x] Scale-up/down/out/in과 strong/weak scaling을 자원 배치와 성능 실험의 서로 다른 축으로 재설명
-- [x] Strong/Weak Scaling, Speedup/Efficiency, Amdahl/Gustafson을 curve 해석 중심의 설명형 본문으로 재작성
-- [x] 성능 측정 방법론을 가설 → baseline → 통제 → 반복 → correctness → 판단의 실험 절차로 재작성
-- [x] perf/PMU/counter/sampling/flame graph를 profiling ladder와 evidence 해석 중심으로 재작성
-- [x] Roofline의 arithmetic intensity, ridge point, measured roof, 실제 성능과 모델 상한의 차이를 보강
-- [x] strace/gdb/core dump/memory checker를 증상별 debugging ladder로 재작성
-- [x] 6개 Performance chapter에 objectives / 5+ terms / 3+ sections / worked example / self-check 적용
-- [x] Performance stage를 CI rich-schema 품질 기준에 포함
-- [x] 측정 방법 / profiling / debugging을 text-safe DOM workflow viewer로 추가
-- [x] 반복 benchmark와 perf profiling을 재현 가능한 Bash script code lesson으로 추가
-- [x] Performance chapter References를 기존 Linux/Intel/Slurm/OpenMP/MPI/GPU source registry에 연결
-- [ ] Performance 실제 브라우저 visual QA: 360 / 768 / desktop에서 curve label·workflow spacing 미세 조정
-
-### Accelerator — 1차 완료
-
-- [x] GPU execution model을 Grid / Block / Warp / Thread / Occupancy / Coalescing 관계 중심으로 재작성
-- [x] GPU memory chapter를 H2D/D2H, pinned memory, streams, overlap, Unified Memory의 실제 data path 중심으로 재작성
-- [x] Multi-GPU chapter를 rank→GPU→CPU/NUMA→NIC topology, NCCL collective, GPUDirect RDMA, MIG/MPS 경계 중심으로 재작성
-- [x] GPU profiling chapter를 Nsight Systems → hot region → Nsight Compute의 profiling ladder로 재작성
-- [x] Distributed training chapter를 dataloader → H2D → forward/backward → AllReduce → optimizer → checkpoint의 end-to-end step으로 재작성
-- [x] HPC container chapter를 image → bind → kernel/driver → MPI/transport 경계와 provenance 관점으로 재작성
-- [x] 6개 Accelerator chapter에 objectives / 5+ terms / 3+ sections / worked example / self-check 적용
-- [x] Accelerator stage를 CI rich-schema 품질 기준에 포함
-- [x] GPU fundamentals / data movement / multi-GPU viewer를 text-safe responsive DOM layout으로 교체
-- [x] GPU profiling timeline과 kernel-metric decision viewer 추가
-- [x] Distributed training step과 HPC container boundary를 DOM concept viewer로 추가
-- [x] AI/HPC chapter를 기존 NVIDIA/AMD/Slurm/Open MPI source registry에 연결
-- [ ] Accelerator 실제 브라우저 visual QA: 360 / 768 / desktop에서 timeline bar·card spacing 미세 조정
-
-### Operations / RCA — 1차 완료
-
-- [x] Slurm control path를 controller → node daemon → hook/cgroup → accounting 경계로 재작성
-- [x] Segfault / OOM / Hang / Deadlock / Rank Failure를 symptom → first causal event → propagation → impact 흐름으로 재작성
-- [x] Node monitoring을 CPU·memory·storage·network·GPU의 동일 시간축 correlation 중심으로 재작성
-- [x] Node health를 DRAIN → evidence capture → A/B reproduction → validation → RESUME lifecycle로 재작성
-- [x] HA / provisioning / config management / telemetry를 fleet desired-state와 configuration drift 관점으로 재작성
-- [x] Security를 identity → path → ACL/mode → quota/limit → secret boundary 흐름으로 재작성
-- [x] Pending / Slow / OOM / I/O-MPI Hang / Low GPU Utilization runbook을 symptom-driven evidence ladder로 재작성
-- [x] 11개 Operations / RCA chapter에 objectives / 5+ terms / 3+ sections / worked example / self-check 적용
-- [x] Operations / RCA stage를 CI rich-schema 품질 기준에 포함
-- [x] Slurm lifecycle / RCA timeline / monitoring correlation / node lifecycle / runbook viewer를 text-safe responsive DOM layout으로 추가
-- [x] Operations / RCA chapter References를 Linux / Slurm / MPI / GPU 공식 source registry에 연결
-- [ ] Operations / RCA 실제 브라우저 visual QA: 360 / 768 / desktop에서 card·lane spacing 미세 조정
-
-### 다음 Stage
-
-- [ ] Expert Practice Quality Pass
-
-## Phase 5 · I/O / Diagnostics teaching pass — Quality Pass 이후 재개
-
-- [x] Linux storage stack: page cache → filesystem → block layer → device / shared FS
-- [x] Scientific I/O: rank-per-file vs shared file vs collective MPI-IO / HDF5 / staging
-- [x] Network benchmark: message-size latency/bandwidth curve, topology comparison, median/p95
-- [x] GPU profiling: CPU/GPU timeline과 idle gap / overlap / hot-kernel drill-down
-- [x] Slurm RCA: pending reason / OOM / node failure evidence timeline
-- [x] Monitoring: CPU-memory-network-storage-GPU time correlation
-
-## Phase 6 · 교재 운영 품질
-
-- [ ] Linux command 결과 예시를 실제 출력과 설명으로 연결
-- [ ] 시각화 keyboard accessibility 전수 검토
-- [ ] 용어 glossary와 챕터 간 교차 링크
-- [ ] 챕터 완료율과 stage별 학습 진행 요약
-- [ ] Quality Pass 완료 stage의 editorial review checklist 자동화 범위 검토
+- [ ] PENDING / OOM / slow job / MPI hang / low GPU incident drill을 단계형 exercise로 확장
+- [ ] evidence가 주어질 때 next-best-test를 고르는 branching self-test 검토
+- [ ] ticket / postmortem / benchmark report template 제공
+- [ ] capacity worksheet와 regression report worksheet 제공
+- [ ] chapter별 lab 결과를 개인 기록으로 남길 수 있는 export 방식 검토
 
 ## 유지 원칙
 
-Roadmap은 아직 하지 않은 일과 우선순위를 기록한다. 완료된 구현의 상세 내역은 `CHANGELOG.md`로 이동하고, 사용자-facing 기능 설명은 루트 `README.md`에 필요한 수준만 유지한다.
+Roadmap에는 앞으로 할 일과 현재 우선순위만 둔다. 완료된 변경의 요약은 `CHANGELOG.md`, 긴 설계 판단과 검수 기록은 `docs/project/logs/`에 둔다. 루트 `README.md`는 학습자와 GitHub 방문자를 위한 user-facing 문서로 유지한다.
