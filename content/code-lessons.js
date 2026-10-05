@@ -18,7 +18,7 @@ export const chapterCodeLessons = Object.freeze({
         code: `#!/usr/bin/env bash
 set -euo pipefail
 
-out_dir=${1:-"./hpc-baseline-$(date +%Y%m%d-%H%M%S)"}
+out_dir=\${1:-"./hpc-baseline-$(date +%Y%m%d-%H%M%S)"}
 mkdir -p "$out_dir"
 
 {
@@ -46,8 +46,8 @@ printf 'wrote %s\n' "$out_dir"`,
         code: `#!/usr/bin/env bash
 set -euo pipefail
 
-log=${1:?"usage: $0 JOB_LOG"}
-summary=${2:-"${log}.summary"}
+log=\${1:?"usage: $0 JOB_LOG"}
+summary=\${2:-"\${log}.summary"}
 
 {
   echo '=== first error candidates ==='
