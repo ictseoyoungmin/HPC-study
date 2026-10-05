@@ -21,7 +21,8 @@ index.html
    │  ├─ quality-v2.css          rich textbook content / common visual rules
    │  ├─ code-block.css          language-aware code/script/lab containers
    │  ├─ system-os-v2.css        System / OS DOM viewer layouts
-   │  └─ parallel-quality.css    Parallel / Cluster DOM viewer layouts
+   │  ├─ parallel-quality.css    Parallel / Cluster DOM viewer layouts
+   │  └─ performance-quality.css Performance DOM workflow layouts
    └─ js/                        MIT application code
       ├─ main.js                 routing / page rendering
       ├─ core/                   theme / state / curriculum assembly
@@ -53,13 +54,13 @@ selfCheck[]
   question / answer
 ```
 
-현재 `Foundation`, `System / OS`, `Parallel / Cluster`가 이 rich schema를 CI에서 강제한다. 이후 stage도 Quality Pass가 끝나는 순서대로 같은 검증 집합에 추가한다.
+현재 `Foundation`, `System / OS`, `Parallel / Cluster`, `Performance`가 이 rich schema를 CI에서 강제한다. 이후 stage도 Quality Pass가 끝나는 순서대로 같은 검증 집합에 추가한다.
 
 `concepts[]`는 더 이상 본문을 대체하지 않는다. 설명형 본문을 읽은 뒤 핵심을 다시 압축하는 summary로 사용한다.
 
-Parallel / Cluster에서는 기존 3개 base module을 유지하면서 `content/enrichments/03-*.js`에 설명형 schema를 분리했다. `assets/js/core/curriculum.js`가 chapter id 기준으로 base object와 enrichment를 merge한다. 이 구조는 대규모 재작성 중에도 기존 명령어/실습/최소 schema를 안정적으로 보존하면서 editorial content를 독립적으로 리뷰하기 위한 전환 구조다. 향후 base module 자체를 rich schema로 통합할 수 있지만, 사용자-facing 결과와 CI 기준은 merge된 최종 chapter object를 기준으로 한다.
+Parallel / Cluster와 Performance에서는 기존 base module을 유지하면서 `content/enrichments/03-*.js`, `content/enrichments/04-performance.js`에 설명형 schema를 분리했다. `assets/js/core/curriculum.js`가 chapter id 기준으로 base object와 enrichment를 merge한다. 이 구조는 대규모 재작성 중에도 기존 명령어/실습/최소 schema를 안정적으로 보존하면서 editorial content를 독립적으로 리뷰하기 위한 전환 구조다. 향후 base module 자체를 rich schema로 통합할 수 있지만, 사용자-facing 결과와 CI 기준은 merge된 최종 chapter object를 기준으로 한다.
 
-`content/code-lessons.js`는 command 한두 줄보다 긴 교육용 code sample을 별도 관리한다. 현재는 diagnostic/utility/automation Bash script를 제공하며 이후 OpenMP/MPI C source, Python 분석 script, Slurm batch script, example output도 같은 schema로 확장한다.
+`content/code-lessons.js`는 command 한두 줄보다 긴 교육용 code sample을 별도 관리한다. 현재 diagnostic/utility/automation Bash script와 Performance benchmark/profiling script를 제공하며 이후 OpenMP/MPI C source, Python 분석 script, Slurm batch script, example output도 같은 schema로 확장한다.
 
 ```text
 chapterId
@@ -119,7 +120,7 @@ Header / why
 }
 ```
 
-Copy 동작은 HTML attribute에 source string을 다시 넣지 않고 해당 block의 `<code>` text를 읽는다. 따라서 multiline script와 quote가 포함된 source도 별도 escaping 규칙 없이 동일하게 복사할 수 있다.
+Copy 동작은 HTML attribute에 source string을 다시 넣지 않고 해당 block의 `<code>` text를 읽는다. 따라서 multiline script와 quote가 포함된 source도 동일하게 복사할 수 있다.
 
 ### Visualization registry
 
@@ -129,6 +130,7 @@ Copy 동작은 HTML attribute에 source string을 다시 넣지 않고 해당 bl
 hpc-overview.js          DOM-based system map / AA diagnostic map
 system-os-map.js         process model / task state / cgroup / namespace-service DOM maps
 parallel-models.js       thread sharing / OpenMP schedule / hybrid placement DOM maps
+performance-method.js    benchmark / profiling / debugging DOM workflows
 cluster3d-v2.js          Core → Socket → Node → Cluster / central fabric hub
 cpu-topology.js          Socket / Core / SMT / binding
 cache-coherence.js       hierarchy / coherence / false sharing
@@ -151,7 +153,7 @@ gpu-nccl.js              GPU execution / data movement / NCCL / GDR
 
 ### Text-heavy visualization
 
-긴 설명을 Canvas 안에 직접 그리지 않는다. Text-heavy concept map은 DOM/CSS를 사용해 wrapping과 responsive layout을 브라우저에 맡긴다.
+긴 설명을 Canvas 안에 직접 그리지 않는다. Text-heavy concept map과 workflow는 DOM/CSS를 사용해 wrapping과 responsive layout을 브라우저에 맡긴다.
 
 Canvas는 다음과 같이 좌표가 의미를 갖는 경우에 우선 사용한다.
 
@@ -160,7 +162,9 @@ Canvas는 다음과 같이 좌표가 의미를 갖는 경우에 우선 사용한
 - dynamic packet / data movement
 - topology whose labels are short and bounded
 
-Network topology에서 교육적 이유가 없는 all-to-all line은 피하고 switch/fabric hub 또는 계층형 connector를 사용한다. Broadcast는 tree, allreduce는 ring처럼 **communication pattern 자체가 connector shape의 이유가 되는 경우**에만 연결선을 사용한다. 작은 화면에서는 같은 개념을 세로 path나 stacked domain으로 재배치하고, desktop 그림을 단순 축소하지 않는다.
+Network topology에서 교육적 이유가 없는 all-to-all line은 피하고 switch/fabric hub 또는 계층형 경로로 표현한다. Broadcast는 tree, allreduce는 ring처럼 **communication pattern 자체가 connector shape의 이유가 되는 경우**에만 연결선을 사용한다. 작은 화면에서는 같은 개념을 세로 path나 stacked domain으로 재배치하고, desktop 그림을 단순 축소하지 않는다.
+
+Performance workflow처럼 text가 핵심인 시각화는 선을 많이 그리지 않고 ordered card sequence로 관계를 표현한다. 3-column desktop layout은 tablet에서 2-column, mobile에서 1-column으로 stack한다.
 
 ### Theme
 
@@ -189,7 +193,7 @@ CI는 교재 파일이 다시 `assets/js/content/` 아래로 들어가는 것을
 
 - 장식보다 개념의 경계·흐름·비용 차이를 보여준다.
 - 버튼 수를 최소화하고 상태 변화가 설명 패널과 함께 바뀌게 한다.
-- 긴 설명은 DOM side panel에 두고 Canvas label은 짧게 유지한다.
+- 긴 설명은 DOM side panel 또는 workflow card에 두고 Canvas label은 짧게 유지한다.
 - 박스에 글자를 맞추기 위해 폰트를 지나치게 축소하지 않는다.
 - 대각선 connector crossing과 의미 없는 all-to-all line을 줄인다.
 - 작은 화면에서는 column을 stack하거나 end-to-end path를 세로로 재배치하고 설명 패널의 읽기 가능성을 우선한다.
