@@ -2,7 +2,7 @@
 
 ## 현재 기준
 
-62개 챕터 curriculum, navigation/search/pagination, Light/Dark theme, 학습 상태 저장, GitHub Pages, CI가 동작한다.
+62개 챕터 curriculum, navigation/search/pagination, Light/Dark theme, 학습 상태 저장, GitHub Pages, CI가 동작한다. 교재 콘텐츠와 코드의 이중 라이선스, source registry, chapter reference 표시도 적용되어 있다.
 
 ## Phase 1 · 핵심 구조 시각화 — 완료
 
@@ -22,7 +22,15 @@
 - [x] GPU execution / data movement
 - [x] NCCL topology / GPUDirect RDMA
 
-## Phase 3 · 다음 우선순위
+## Phase 3 · Source / licensing governance — 완료
+
+- [x] Content CC BY 4.0 / code MIT 경계 정의
+- [x] `NOTICE.md`와 third-party asset policy
+- [x] 주요 공식 문서 license/terms 조사와 `docs/SOURCES.md`
+- [x] chapter→source registry와 페이지 하단 References
+- [x] CI licensing/source metadata 검사
+
+## Phase 4 · 다음 우선순위
 
 - [ ] Linux storage stack: page cache → filesystem → block layer → device
 - [ ] Scientific I/O: rank-per-file vs collective MPI-IO/HDF5
@@ -31,7 +39,7 @@
 - [ ] Slurm RCA: pending reason / OOM / node failure evidence timeline
 - [ ] Monitoring: CPU-memory-network-storage-GPU time correlation
 
-## Phase 4 · 교재 품질
+## Phase 5 · 교재 품질
 
 - [ ] 챕터별 learning objective와 self-check question 추가
 - [ ] Linux command 결과 예시를 실제 출력과 설명으로 연결
@@ -39,6 +47,7 @@
 - [ ] 모바일 360 px 기준 viewer 레이아웃 점검
 - [ ] 용어 glossary와 교차 링크
 - [ ] 챕터 완료율과 stage별 학습 진행 요약
+- [ ] 교육 콘텐츠를 JavaScript data object에서 독립 content 파일로 옮겨 코드/콘텐츠 라이선스 경계를 물리적으로도 분리
 
 ## 유지 원칙
 
