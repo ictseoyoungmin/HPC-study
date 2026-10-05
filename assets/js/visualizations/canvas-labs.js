@@ -19,6 +19,7 @@ import { mountGpuConcepts } from "./gpu-concepts.js";
 import { mountGpuProfiling } from "./gpu-profiling.js";
 import { mountDistributedTraining, mountContainerBoundary } from "./accelerator-models.js";
 import { mountOperationsRca } from "./operations-rca.js";
+import { mountExpertPractice } from "./expert-practice.js";
 import { mountRoofline } from "./roofline.js";
 
 const mounts = {
@@ -64,7 +65,14 @@ const mounts = {
   "runbook-slow": host => mountOperationsRca(host, "runbook-slow"),
   "runbook-oom": host => mountOperationsRca(host, "runbook-oom"),
   "runbook-io-mpi": host => mountOperationsRca(host, "runbook-io-mpi"),
-  "runbook-gpu": host => mountOperationsRca(host, "runbook-gpu")
+  "runbook-gpu": host => mountOperationsRca(host, "runbook-gpu"),
+  "workloads": host => mountExpertPractice(host, "workloads"),
+  "capacity": host => mountExpertPractice(host, "capacity"),
+  "regression": host => mountExpertPractice(host, "regression"),
+  "ticket-postmortem": host => mountExpertPractice(host, "ticket-postmortem"),
+  "roadmap": host => mountExpertPractice(host, "roadmap"),
+  "selftest": host => mountExpertPractice(host, "selftest"),
+  "reference": host => mountExpertPractice(host, "reference")
 };
 
 export const canvasLabIds = Object.freeze(Object.keys(mounts));
