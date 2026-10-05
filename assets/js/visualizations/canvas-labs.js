@@ -9,6 +9,7 @@ import { mountVirtualMemory } from "./virtual-memory.js";
 import { mountNetworkRdma } from "./network-rdma.js";
 import { mountStorageStack } from "./storage-stack.js";
 import { mountParallelFilesystem } from "./parallel-filesystem.js";
+import { mountScientificIo } from "./scientific-io.js";
 import { mountGpuNccl } from "./gpu-nccl.js";
 import { mountRoofline } from "./roofline.js";
 
@@ -23,6 +24,7 @@ const mounts = {
   "rdma-interconnect": host => mountNetworkRdma(host, "rdma"),
   "storage-stack": mountStorageStack,
   "parallel-filesystems": mountParallelFilesystem,
+  "scientific-io": mountScientificIo,
   "slurm-basics": mountScheduler,
   "slurm-resources": mountScheduler,
   "scaling": mountResourceScaling,

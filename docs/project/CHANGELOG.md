@@ -2,6 +2,14 @@
 
 프로젝트 내부 구현 기록이다. 사용자-facing 소개와 작업 로그를 분리하기 위해 루트 README에는 상세 변경 이력을 두지 않는다.
 
+## 2026-10-05 · Scientific I/O teaching pass
+
+- `scientific-io` 챕터에 전용 Canvas viewer를 추가했다.
+- Rank-per-file, shared file independent I/O, collective MPI-IO, Parallel HDF5/NetCDF, data staging을 서로 다른 data path로 비교한다.
+- rank 수 증가가 file-count/metadata pressure에 미치는 영향과 collective aggregator의 역할을 시각적으로 분리했다.
+- collective I/O의 장점뿐 아니라 rank 간 communication/synchronization 비용과 filesystem/access-pattern 의존성도 설명한다.
+- `scientific-io`를 핵심 teaching visualization CI 목록에 추가했다.
+
 ## 2026-10-05 · Physical content boundary / storage stack
 
 - 62개 chapter module을 `assets/js/content/`에서 `content/chapters/`로 이동해 CC BY 콘텐츠와 MIT 애플리케이션 코드의 경계를 디렉터리 수준으로 분리했다.

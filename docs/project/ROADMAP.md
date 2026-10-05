@@ -34,7 +34,7 @@
 ## Phase 4 · I/O / Diagnostics teaching pass — 진행 중
 
 - [x] Linux storage stack: page cache → filesystem → block layer → device / shared FS
-- [ ] Scientific I/O: rank-per-file vs collective MPI-IO/HDF5
+- [x] Scientific I/O: rank-per-file vs shared file vs collective MPI-IO / HDF5 / staging
 - [ ] Network benchmark: message size에 따른 latency/bandwidth curve
 - [ ] GPU profiling: CPU/GPU timeline과 idle gap
 - [ ] Slurm RCA: pending reason / OOM / node failure evidence timeline
