@@ -35,7 +35,7 @@
 
 ## Phase 4 · Content & Visualization Quality Pass v2 — 최우선 진행 중
 
-### Foundation
+### Foundation — 1차 완료
 
 - [x] `HPC와 Application Analyst의 역할` 설명형 본문 / 용어 / self-check 재작성
 - [x] `클러스터 구조와 서비스 경로` 설명형 본문 재작성
@@ -48,10 +48,23 @@
 - [x] Cluster 3D의 all-to-all 연결선을 central fabric hub 구조로 교체
 - [ ] Foundation 모바일 360 px / 768 px 레이아웃 실제 시각 검수 및 미세 조정
 
+### System / OS — 1차 완료
+
+- [x] Process / Thread / Signal / FD / ulimit 설명형 본문 재작성
+- [x] Linux scheduler / cgroup / namespace / systemd 설명형 본문 재작성
+- [x] Virtual memory / page fault / swap / OOM 설명형 본문 재작성
+- [x] CPU topology / SMT / binding 설명형 본문 재작성
+- [x] Pipeline / IPC / branch / vectorization 설명형 본문 재작성
+- [x] Cache / coherence / false sharing 설명형 본문 재작성
+- [x] NUMA / first-touch / memory placement 설명형 본문 재작성
+- [x] Frequency / turbo / power-state 설명형 본문 재작성
+- [x] System / OS rich schema를 CI 품질 기준에 포함
+- [x] Process model과 OS control path를 text-safe DOM viewer로 추가
+- [x] CPU topology / cache / virtual memory / NUMA viewer의 connector·responsive layout 코드 1차 정리
+- [ ] System / OS 실제 브라우저 visual QA: 360 / 768 / desktop에서 collision·spacing 미세 조정
+
 ### 다음 Stage
 
-- [ ] System / OS: process/thread → scheduler/cgroup → virtual memory → topology/cache/NUMA 순서로 본문 재작성
-- [ ] System / OS viewer의 text overflow / connector crossing 전수 점검
 - [ ] Parallel / Cluster Quality Pass
 - [ ] Performance Quality Pass
 - [ ] Accelerator Quality Pass
