@@ -1,40 +1,28 @@
 import { css, roundRect, label, box, line, arrow, particle, createLoop, viewerShell, setDetails, activateButton } from "./canvas-utils.js";
 
-export function mountMpi(host) {
-  const details = {
-    p2p: {
-      title: "Point-to-point: rank 간 메시지",
-      body: "MPI rank는 독립 process이므로 서로의 address space를 직접 읽지 않는다. 데이터를 전달하려면 source, destination, tag와 communicator에 맞는 send/receive가 연결되어야 한다.",
-      rows: [
-        ["같은 Node", "rank 간 데이터도 process memory boundary를 넘지만 shared-memory 최적화 transport가 사용될 수 있다."],
-        ["다른 Node", "메시지는 NIC와 interconnect를 거쳐 상대 Node의 rank로 전달된다."],
-        ["진단", "hang이 나면 어느 rank가 send/recv 또는 collective에서 기다리는지 rank별 progress를 비교한다."]
-      ],
-      note: "rank 수와 Node 수는 다른 개념이다. 하나의 Node에 여러 rank가 배치될 수 있다."
-    },
-    bcast: {
-      title: "Broadcast: 한 root에서 전체 rank로",
-      body: "MPI_Bcast 같은 collective는 communicator의 모든 참여 rank가 같은 collective 순서를 따라야 한다. 구현체는 단순한 root→모두 연결이 아니라 topology-aware tree 등을 사용할 수 있다.",
-      rows: [
-        ["Root", "한 rank가 초기 데이터를 제공한다."],
-        ["참여", "communicator 안의 모든 rank가 collective 호출에 참여해야 한다."],
-        ["성능", "message size, rank placement, network topology에 따라 collective algorithm의 효율이 달라진다."]
-      ],
-      note: "그림의 연결은 개념 모델이며 실제 MPI 구현의 알고리즘을 고정적으로 뜻하지 않는다."
-    },
-    allreduce: {
-      title: "Allreduce: 전체 기여 + 전체 결과",
-      body: "모든 rank의 값을 reduction하고 그 결과를 다시 모든 rank가 받는다. 분산 학습의 gradient reduction이나 수치 해석의 global norm 같은 패턴에서 자주 나타난다.",
-      rows: [
-        ["통신량", "rank 수가 늘수록 collective 비용과 topology 영향이 중요해진다."],
-        ["동기화", "느린 rank 하나가 collective 완료 시간을 늦추는 straggler가 될 수 있다."],
-        ["관찰", "placement, message size, collective 종류, transport를 함께 기록해 scale-out 저하를 해석한다."]
-      ],
-      note: "nonblocking collective도 호출 즉시 통신이 끝났다는 뜻은 아니며 completion을 확인해야 한다."
-    }
-  };
+const details = {
+  p2p: {
+    title: "Point-to-point: process boundary를 넘는 한 메시지",
+    body: "MPI rank는 독립 process다. 다른 rank의 memory를 일반 load/store로 읽는 대신 communicator, source/destination, tag가 맞는 send/receive로 데이터를 전달한다.",
+    rows: [["같은 Node", "shared-memory transport가 사용될 수 있음"], ["다른 Node", "NIC와 fabric을 거쳐 remote rank로 이동"], ["진단", "각 rank가 어느 call에서 기다리는지 비교"]],
+    note: "rank 번호는 물리 Node 위치가 아니다. placement를 별도로 확인한다."
+  },
+  bcast: {
+    title: "Broadcast: 실제 구현은 tree처럼 전파할 수 있다",
+    body: "MPI_Bcast는 root의 데이터를 communicator 전체에 전달한다. 개념적으로 root가 모든 rank에 직접 선을 뻗는 그림보다 tree 전파로 이해하면 collective가 topology와 algorithm의 영향을 받는다는 점을 보기 쉽다.",
+    rows: [["참여", "communicator의 모든 rank가 같은 collective 순서에 참여"], ["알고리즘", "tree 등 구현 전략은 MPI/runtime과 message size에 따라 달라짐"], ["straggler", "늦게 도착한 rank가 collective 완료를 늦출 수 있음"]],
+    note: "그림은 개념 모델이며 특정 MPI implementation의 실제 tree를 고정적으로 나타내지 않는다."
+  },
+  allreduce: {
+    title: "Allreduce: 전체 기여와 전체 결과",
+    body: "모든 rank의 값을 reduction한 뒤 그 결과를 모든 rank가 얻는다. 구현은 ring, tree, recursive algorithm 등 여러 방식을 사용할 수 있다.",
+    rows: [["비용", "message size · rank 수 · topology 영향"], ["동기화", "느린 rank 하나가 전체 collective를 지연 가능"], ["관찰", "placement와 transport, message size를 함께 기록"]],
+    note: "ring 그림은 data가 rank 사이를 순환하는 collective intuition을 위한 교육용 모델이다."
+  }
+};
 
-  const { canvas, controls } = viewerShell(host, "MPI rank와 통신 경계",
+export function mountMpi(host) {
+  const { canvas, controls } = viewerShell(host, "MPI communication patterns",
     `<button class="viz-btn active" data-mode="p2p">P2P</button>
      <button class="viz-btn" data-mode="bcast">Broadcast</button>
      <button class="viz-btn" data-mode="allreduce">Allreduce</button>`, details.p2p);
@@ -50,72 +38,81 @@ export function mountMpi(host) {
 
   const stop = createLoop(canvas, (ctx, w, h, t) => {
     ctx.clearRect(0, 0, w, h);
-    const pad = 20;
-    const gap = Math.max(28, Math.min(54, w * .07));
-    const nodeW = (w - pad * 2 - gap) / 2;
-    const nodeH = h - 60;
-    const top = 28;
-    const nodes = [
-      { x: pad, y: top, w: nodeW, h: nodeH },
-      { x: pad + nodeW + gap, y: top, w: nodeW, h: nodeH }
-    ];
-    const ranks = [];
-
-    nodes.forEach((node, ni) => {
-      roundRect(ctx, node.x, node.y, node.w, node.h, 10, css("--viewer-side"), css("--viewer-line"));
-      label(ctx, `Compute Node ${ni}`, node.x + 14, node.y + 18, { align: "left", size: 12, color: css("--viewer-muted") });
-      for (let r = 0; r < 4; r++) {
-        const cols = 2;
-        const row = Math.floor(r / cols);
-        const col = r % cols;
-        const rw = (node.w - 34) / 2;
-        const rh = 78;
-        const x = node.x + 12 + col * (rw + 10);
-        const y = node.y + 50 + row * (rh + 18);
-        const rank = ni * 4 + r;
-        roundRect(ctx, x, y, rw, rh, 7, css("--viz-node"), css("--viewer-line"));
-        label(ctx, `rank ${rank}`, x + rw / 2, y + 20, { size: 12 });
-        box(ctx, x + 10, y + 38, rw - 20, 27, "private memory", { size: 9 });
-        ranks.push({ x: x + rw / 2, y: y + rh / 2, boxX: x, boxY: y, w: rw, h: rh, node: ni });
-      }
-      box(ctx, node.x + 14, node.y + node.h - 58, node.w - 28, 36, "NIC / MPI transport", { size: 10 });
-    });
-
-    const networkY = h - 18;
-    line(ctx, nodes[0].x + nodes[0].w / 2, nodes[0].y + nodes[0].h, nodes[0].x + nodes[0].w / 2, networkY, css("--warning"), 2);
-    line(ctx, nodes[1].x + nodes[1].w / 2, nodes[1].y + nodes[1].h, nodes[1].x + nodes[1].w / 2, networkY, css("--warning"), 2);
-    line(ctx, nodes[0].x + nodes[0].w / 2, networkY, nodes[1].x + nodes[1].w / 2, networkY, css("--warning"), 3);
-    label(ctx, "interconnect", w / 2, networkY - 10, { size: 10, color: css("--warning") });
-
-    let edges = [];
-    if (mode === "p2p") edges = [[0, 5]];
-    if (mode === "bcast") edges = [[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7]];
-    if (mode === "allreduce") edges = Array.from({ length: 8 }, (_, i) => [i, (i + 1) % 8]);
-
-    edges.forEach(([a, b], index) => {
-      const ra = ranks[a], rb = ranks[b];
-      const crossNode = ra.node !== rb.node;
-      const color = crossNode ? css("--warning") : css("--accent");
-      ctx.save();
-      ctx.strokeStyle = color;
-      ctx.lineWidth = mode === "p2p" ? 3 : 1.7;
-      ctx.globalAlpha = mode === "p2p" || index % 2 === 0 ? .9 : .55;
-      ctx.beginPath();
-      ctx.moveTo(ra.x, ra.y);
-      if (crossNode) {
-        ctx.bezierCurveTo(ra.x, networkY - 50, rb.x, networkY - 50, rb.x, rb.y);
-      } else {
-        ctx.lineTo(rb.x, rb.y);
-      }
-      ctx.stroke();
-      ctx.restore();
-    });
-
-    if (edges.length) {
-      const e = edges[Math.floor(t * 1.5) % edges.length];
-      const a = ranks[e[0]], b = ranks[e[1]];
-      particle(ctx, a, b, (t * .7) % 1, css("--accent-2"));
-    }
+    if (mode === "p2p") drawP2P(ctx, w, h, t);
+    else if (mode === "bcast") drawBroadcast(ctx, w, h, t);
+    else drawAllreduce(ctx, w, h, t);
   });
   return () => { stop(); controls.removeEventListener("click", click); };
+}
+
+function drawP2P(ctx, w, h, t) {
+  const narrow = w < 560;
+  if (narrow) {
+    const bw = Math.min(250, w - 56), x = (w - bw) / 2;
+    const rows = [
+      ["rank 0 · private memory", 42, true],
+      ["NIC / MPI transport", 142, false],
+      ["Fabric / switch", 242, true],
+      ["NIC / MPI transport", 342, false],
+      ["rank 5 · private memory", 442, true]
+    ];
+    rows.forEach(([name,y,accent])=>box(ctx,x,y,bw,48,name,{accent,size:11}));
+    for(let i=0;i<rows.length-1;i++) arrow(ctx,w/2,rows[i][1]+48,w/2,rows[i+1][1]-3,css("--viewer-line"),2);
+    particle(ctx,{x:w/2,y:rows[0][1]+50},{x:w/2,y:rows[4][1]-4},(t*.22)%1,css("--accent-2"));
+    return;
+  }
+  const nodeW = Math.min(240, w*.31), nodeH = 220, top = 90;
+  const left = {x:38,y:top,w:nodeW,h:nodeH}, right={x:w-38-nodeW,y:top,w:nodeW,h:nodeH};
+  [left,right].forEach((n,i)=>{
+    roundRect(ctx,n.x,n.y,n.w,n.h,10,css("--viewer-side"),css("--viewer-line"));
+    label(ctx,`Compute Node ${i}`,n.x+14,n.y+18,{align:"left",size:12,color:css("--viewer-muted")});
+    box(ctx,n.x+22,n.y+48,n.w-44,72,`rank ${i?5:0}\nprivate memory`,{accent:true,size:11});
+    box(ctx,n.x+22,n.y+n.h-58,n.w-44,38,"NIC / MPI transport",{size:10});
+    arrow(ctx,n.x+n.w/2,n.y+120,n.x+n.w/2,n.y+n.h-61,css("--viewer-line"),2);
+  });
+  const fw=Math.min(150,w-left.w-right.w-120), fy=top+nodeH-58;
+  box(ctx,w/2-fw/2,fy,fw,38,"Fabric",{accent:true,size:11});
+  arrow(ctx,left.x+left.w,fy+19,w/2-fw/2-3,fy+19,css("--accent"),2);
+  arrow(ctx,w/2+fw/2+3,fy+19,right.x,fy+19,css("--accent"),2);
+  particle(ctx,{x:left.x+left.w,y:fy+19},{x:right.x,y:fy+19},(t*.38)%1,css("--accent-2"));
+}
+
+function drawBroadcast(ctx, w, h, t) {
+  const cx=w/2;
+  const levels=[
+    [{x:cx,y:52,label:"root · rank 0"}],
+    [{x:w*.32,y:190,label:"rank 1"},{x:w*.68,y:190,label:"rank 4"}],
+    [{x:w*.18,y:340,label:"rank 2"},{x:w*.40,y:340,label:"rank 3"},{x:w*.60,y:340,label:"rank 5"},{x:w*.82,y:340,label:"rank 6"}]
+  ];
+  const bw=Math.min(112,Math.max(72,w*.15)), bh=44;
+  levels.flat().forEach((n,i)=>box(ctx,n.x-bw/2,n.y,bw,bh,n.label,{accent:i===0,size:10}));
+  const edges=[];
+  levels[1].forEach(c=>edges.push([levels[0][0],c]));
+  edges.push([levels[1][0],levels[2][0]],[levels[1][0],levels[2][1]],[levels[1][1],levels[2][2]],[levels[1][1],levels[2][3]]);
+  edges.forEach(([a,b])=>arrow(ctx,a.x,a.y+bh,b.x,b.y-3,css("--viewer-line"),1.8));
+  const edge=edges[Math.floor(t*1.3)%edges.length];
+  particle(ctx,{x:edge[0].x,y:edge[0].y+bh},{x:edge[1].x,y:edge[1].y-4},(t*.7)%1,css("--accent-2"));
+  label(ctx,"collective tree · no all-to-all fan-out",cx,h-26,{size:11,color:css("--viewer-muted"),maxWidth:w-30});
+}
+
+function drawAllreduce(ctx, w, h, t) {
+  const count = w < 560 ? 6 : 8;
+  const cx=w/2, cy=h/2-10, radius=Math.min(w*.34,h*.34), nodeR=w<560?20:23;
+  const nodes=Array.from({length:count},(_,i)=>{
+    const a=-Math.PI/2+(Math.PI*2*i/count);
+    return {x:cx+Math.cos(a)*radius,y:cy+Math.sin(a)*radius,a};
+  });
+  nodes.forEach((n,i)=>{
+    ctx.beginPath();ctx.fillStyle=i===0?css("--viz-accent-bg"):css("--viz-node");ctx.strokeStyle=i===0?css("--accent"):css("--viewer-line");ctx.lineWidth=1.4;ctx.arc(n.x,n.y,nodeR,0,Math.PI*2);ctx.fill();ctx.stroke();
+    label(ctx,`r${i}`,n.x,n.y,{size:10});
+  });
+  nodes.forEach((a,i)=>{
+    const b=nodes[(i+1)%count];
+    const vx=b.x-a.x, vy=b.y-a.y, len=Math.hypot(vx,vy)||1, ux=vx/len, uy=vy/len;
+    arrow(ctx,a.x+ux*nodeR,a.y+uy*nodeR,b.x-ux*nodeR,b.y-uy*nodeR,css("--viewer-line"),1.6);
+  });
+  const i=Math.floor(t*.8)%count, a=nodes[i], b=nodes[(i+1)%count];
+  particle(ctx,a,b,(t*.8)%1,css("--warning"));
+  box(ctx,cx-90,cy-26,180,52,"reduce + distribute",{accent:true,size:11});
+  label(ctx,"ring은 collective algorithm intuition용 모델",cx,h-24,{size:11,color:css("--viewer-muted"),maxWidth:w-30});
 }
