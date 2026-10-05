@@ -1,5 +1,6 @@
 import { mountHpcOverview } from "./hpc-overview.js";
 import { mountProcessModel, mountOsControl } from "./system-os-map.js";
+import { mountParallelModels } from "./parallel-models.js";
 import { mountCpu } from "./cpu-topology.js";
 import { mountNuma } from "./numa.js";
 import { mountMpi } from "./mpi.js";
@@ -24,6 +25,9 @@ const mounts = {
   "cache-coherence": mountCacheCoherence,
   "virtual-memory": mountVirtualMemory,
   "numa": mountNuma,
+  "pthreads-openmp": host => mountParallelModels(host, "threads"),
+  "openmp-advanced": host => mountParallelModels(host, "schedule"),
+  "hybrid": host => mountParallelModels(host, "hybrid"),
   "mpi-basics": mountMpi,
   "mpi-advanced": mountMpi,
   "network-basics": host => mountNetworkRdma(host, "tcp"),
