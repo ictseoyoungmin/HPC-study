@@ -2,6 +2,17 @@
 
 프로젝트 내부 구현 기록이다. 사용자-facing 소개와 작업 로그를 분리하기 위해 루트 README에는 상세 변경 이력을 두지 않는다.
 
+## 2026-10-05 · Foundation textbook quality pass v2
+
+- 기능 확장보다 교재 완성도를 우선하도록 roadmap을 재정렬하고 `CONTENT-QUALITY.md`에 editorial/visual 기준을 정의했다.
+- Foundation 5개 챕터를 `why + concepts[]` 중심의 요약형 콘텐츠에서 `학습 목표 → 용어 정의 → 설명형 본문 → 요약 → 시각화 → 진단 예시 → 명령어 → 실습 → self-check` 구조로 재작성했다.
+- chapter schema에 `learningObjectives`, `terms`, `sections`, `example`, `selfCheck`를 추가하고 renderer가 rich schema를 지원하도록 확장했다.
+- Foundation stage는 CI에서 learning objectives, 5개 이상의 용어 정의, 3개 이상의 설명 section, 3개 이상의 self-check를 요구하도록 했다.
+- 첫 챕터에 DOM 기반 HPC system map을 추가해 긴 설명 text를 Canvas 좌표에 직접 배치하지 않도록 했다.
+- Cluster 3D viewer를 새 구현으로 교체하고 node 간 all-to-all diagonal line을 central fabric hub의 4개 spoke로 단순화했다.
+- `quality-v2.css`를 추가해 용어 카드, 설명 본문, worked example, self-check, 모바일 stacking과 viewer overflow 규칙을 분리했다.
+- Foundation 각 챕터를 source registry의 기존 공식 reference에 연결했다.
+
 ## 2026-10-05 · Network benchmark teaching pass
 
 - `network-benchmark` 챕터에 전용 Canvas viewer를 추가했다.
