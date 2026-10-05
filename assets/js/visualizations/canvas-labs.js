@@ -4,23 +4,31 @@ import { mountMpi } from "./mpi.js";
 import { mountScheduler } from "./slurm.js";
 import { mountResourceScaling } from "./resource-scaling.js";
 import { mountStrongWeak } from "./strong-weak.js";
-import { mountMemory, mountRoofline, mountGpu } from "./misc-labs.js";
+import { mountCacheCoherence } from "./cache-coherence.js";
+import { mountVirtualMemory } from "./virtual-memory.js";
+import { mountNetworkRdma } from "./network-rdma.js";
+import { mountParallelFilesystem } from "./parallel-filesystem.js";
+import { mountGpuNccl } from "./gpu-nccl.js";
+import { mountRoofline } from "./roofline.js";
 
 const mounts = {
   "cpu-topology": mountCpu,
-  "cache-coherence": mountMemory,
-  "virtual-memory": mountMemory,
+  "cache-coherence": mountCacheCoherence,
+  "virtual-memory": mountVirtualMemory,
   "numa": mountNuma,
   "mpi-basics": mountMpi,
   "mpi-advanced": mountMpi,
+  "network-basics": host => mountNetworkRdma(host, "tcp"),
+  "rdma-interconnect": host => mountNetworkRdma(host, "rdma"),
+  "parallel-filesystems": mountParallelFilesystem,
   "slurm-basics": mountScheduler,
   "slurm-resources": mountScheduler,
   "scaling": mountResourceScaling,
   "strong-weak": mountStrongWeak,
   "roofline": mountRoofline,
-  "gpu-basics": mountGpu,
-  "gpu-memory": mountGpu,
-  "multi-gpu": mountGpu
+  "gpu-basics": host => mountGpuNccl(host, "fundamentals"),
+  "gpu-memory": host => mountGpuNccl(host, "data"),
+  "multi-gpu": host => mountGpuNccl(host, "multi")
 };
 
 export const canvasLabIds = Object.freeze(Object.keys(mounts));
