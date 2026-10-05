@@ -17,6 +17,7 @@ import { enhancements as q6a } from "../../../content/enrichments/06-slurm-rca.j
 import { enhancements as q6b } from "../../../content/enrichments/06-monitoring-ops.js";
 import { enhancements as q6c } from "../../../content/enrichments/06-runbooks.js";
 import { chapters as c7 } from "../../../content/chapters/07-expert-practice.js";
+import { enhancements as q7 } from "../../../content/enrichments/07-expert-practice.js";
 
 const quality3 = Object.freeze({ ...q3a, ...q3b, ...q3c });
 const quality6 = Object.freeze({ ...q6a, ...q6b, ...q6c });
@@ -27,7 +28,7 @@ export const chapters = [
   ...enrich(c3a, quality3), ...enrich(c3b, quality3), ...enrich(c3c, quality3),
   ...enrich(c4, q4), ...enrich(c5, q5),
   ...enrich(c6a, quality6), ...enrich(c6b, quality6), ...enrich(c6c, quality6),
-  ...c7
+  ...enrich(c7, q7)
 ];
 
 export const stageOrder = [
