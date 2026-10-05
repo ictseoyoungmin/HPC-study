@@ -2,6 +2,15 @@
 
 프로젝트 내부 구현 기록이다. 사용자-facing 소개와 작업 로그를 분리하기 위해 루트 README에는 상세 변경 이력을 두지 않는다.
 
+## 2026-10-05 · Network benchmark teaching pass
+
+- `network-benchmark` 챕터에 전용 Canvas viewer를 추가했다.
+- Message size에 따른 relative latency와 bandwidth saturation curve를 분리해 읽도록 했다.
+- same-node / same-switch / cross-switch topology를 같은 sweep에서 비교하는 실험 설계를 시각화했다.
+- 반복 측정에서 median과 p95를 함께 보며 tail latency와 jitter를 분리하도록 했다.
+- OSU Micro-Benchmarks와 iperf3의 측정 경로가 다를 수 있음을 설명하고, 두 공식 프로젝트를 source registry와 References에 추가했다.
+- `network-benchmark`를 핵심 teaching visualization CI 목록에 추가했다.
+
 ## 2026-10-05 · Scientific I/O teaching pass
 
 - `scientific-io` 챕터에 전용 Canvas viewer를 추가했다.

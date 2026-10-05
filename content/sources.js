@@ -27,6 +27,20 @@ export const sources = Object.freeze({
     license: "MPICH COPYRIGHT permissive notice",
     usage: "technical-reference"
   },
+  "osu-omb": {
+    title: "OSU Micro-Benchmarks",
+    publisher: "The Ohio State University / MVAPICH Project",
+    url: "https://mvapich.cse.ohio-state.edu/benchmarks/",
+    license: "BSD license according to the official benchmark distribution page",
+    usage: "technical-reference"
+  },
+  "iperf3": {
+    title: "iperf3",
+    publisher: "ESnet / Lawrence Berkeley National Laboratory",
+    url: "https://software.es.net/iperf/",
+    license: "BSD 3-clause",
+    usage: "technical-reference"
+  },
   "slurm": {
     title: "Slurm Documentation",
     publisher: "SchedMD",
@@ -81,6 +95,7 @@ export const chapterReferences = Object.freeze({
   "mpi-advanced": ["mpi-forum", "openmpi", "mpich"],
   "network-basics": ["linux-kernel", "openhpc"],
   "rdma-interconnect": ["openmpi", "openhpc"],
+  "network-benchmark": ["osu-omb", "iperf3", "openmpi"],
   "storage-stack": ["linux-kernel", "redhat-docs"],
   "parallel-filesystems": ["linux-kernel", "openhpc"],
   "scientific-io": ["mpi-forum", "openmpi", "openhpc"],

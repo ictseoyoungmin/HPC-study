@@ -42,8 +42,10 @@ virtual-memory.js        translation / faults / pressure
 numa.js                  local / remote / first-touch
 mpi.js                   P2P / broadcast / allreduce
 network-rdma.js          TCP / RDMA / UCX-libfabric
+network-benchmark.js     latency / bandwidth / topology / median-p95
 storage-stack.js         page cache / filesystem / block / device / shared FS
 parallel-filesystem.js   metadata / striping / small files
+scientific-io.js         rank-per-file / collective MPI-IO / HDF5 / staging
 slurm.js                 job lifecycle / resource allocation
 resource-scaling.js      scale up/down/out/in
 strong-weak.js           strong / weak / Amdahl

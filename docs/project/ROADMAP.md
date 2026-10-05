@@ -35,7 +35,7 @@
 
 - [x] Linux storage stack: page cache → filesystem → block layer → device / shared FS
 - [x] Scientific I/O: rank-per-file vs shared file vs collective MPI-IO / HDF5 / staging
-- [ ] Network benchmark: message size에 따른 latency/bandwidth curve
+- [x] Network benchmark: message-size latency/bandwidth curve, topology comparison, median/p95
 - [ ] GPU profiling: CPU/GPU timeline과 idle gap
 - [ ] Slurm RCA: pending reason / OOM / node failure evidence timeline
 - [ ] Monitoring: CPU-memory-network-storage-GPU time correlation

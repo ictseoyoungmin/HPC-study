@@ -7,6 +7,7 @@ import { mountStrongWeak } from "./strong-weak.js";
 import { mountCacheCoherence } from "./cache-coherence.js";
 import { mountVirtualMemory } from "./virtual-memory.js";
 import { mountNetworkRdma } from "./network-rdma.js";
+import { mountNetworkBenchmark } from "./network-benchmark.js";
 import { mountStorageStack } from "./storage-stack.js";
 import { mountParallelFilesystem } from "./parallel-filesystem.js";
 import { mountScientificIo } from "./scientific-io.js";
@@ -22,6 +23,7 @@ const mounts = {
   "mpi-advanced": mountMpi,
   "network-basics": host => mountNetworkRdma(host, "tcp"),
   "rdma-interconnect": host => mountNetworkRdma(host, "rdma"),
+  "network-benchmark": mountNetworkBenchmark,
   "storage-stack": mountStorageStack,
   "parallel-filesystems": mountParallelFilesystem,
   "scientific-io": mountScientificIo,
