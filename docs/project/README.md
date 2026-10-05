@@ -6,4 +6,9 @@
 - `ROADMAP.md` — 진행 중인 작업과 다음 우선순위
 - `CHANGELOG.md` — 구현 단위의 변경 기록
 
+라이선스와 외부 reference 정책은 사용자·기여자 모두가 쉽게 찾을 수 있도록 `docs/` 바로 아래에 둡니다.
+
+- `../LICENSING.md` — 콘텐츠/코드/third-party 라이선스 경계와 재사용 원칙
+- `../SOURCES.md` — 주요 공식 문서, 확인된 라이선스/terms, HPC Study의 사용 방식
+
 사용자에게 직접 필요한 내용은 루트 `README.md`에 두고, 작업 계획·내부 구조·구현 로그는 이 폴더에서 관리합니다.
