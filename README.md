@@ -24,7 +24,7 @@ HPC Application Analyst가 시스템 구조부터 성능 분석, 운영·RCA까�
 
 각 챕터는 가능한 한 같은 학습 흐름을 따릅니다.
 
-**왜 중요한가 → 핵심 개념 → 개념 시각화 → Linux에서 확인 → 실습 → 흔한 실수 → Troubleshooting 관점**
+**왜 중요한가 → 핵심 개념 → 개념 시각화 → Linux에서 확인 → 실습 → 흔한 실수 → Troubleshooting 관점 → References**
 
 검색과 좌측 navigation으로 챕터를 이동할 수 있으며, 이전/다음 버튼과 `←`, `→`, `PageUp`, `PageDown` 키도 사용할 수 있습니다.
 
@@ -42,6 +42,18 @@ HPC Application Analyst가 시스템 구조부터 성능 분석, 운영·RCA까�
 - Scale-up/out, Strong/Weak scaling, Amdahl
 - Roofline
 - GPU execution/data movement, NCCL, GPUDirect RDMA
+
+## Sources and licensing
+
+HPC Study는 외부 공식 문서를 사실 확인과 동작 검증을 위한 reference로 사용하고, 설명·예제·실습·도식·인터랙티브 시각화는 원칙적으로 직접 제작합니다.
+
+- 교재 콘텐츠: **CC BY 4.0** — [LICENSE-CONTENT](LICENSE-CONTENT)
+- 웹 애플리케이션/시각화 코드: **MIT** — [LICENSE-CODE](LICENSE-CODE)
+- 제3자 자료: 원 라이선스 유지 — [NOTICE.md](NOTICE.md)
+- 주요 공식 문서와 사용 정책: [docs/SOURCES.md](docs/SOURCES.md)
+- 라이선스 운영 원칙: [docs/LICENSING.md](docs/LICENSING.md)
+
+각 챕터 하단의 References는 해당 내용을 검증할 때 사용한 주요 공식 자료를 보여줍니다. References에 링크가 있다는 사실만으로 원문·그림·코드의 재사용 허가가 생기는 것은 아닙니다.
 
 ## 로컬에서 보기
 
@@ -67,3 +79,4 @@ README는 학습자에게 필요한 정보만 유지합니다. 구조·개발 �
 - [Roadmap](docs/project/ROADMAP.md)
 - [Change log](docs/project/CHANGELOG.md)
 - [Project documentation index](docs/project/README.md)
+- [Contributing](CONTRIBUTING.md)
