@@ -1,0 +1,39 @@
+import { chapters as c1 } from "./01-foundation.js";
+import { chapters as c2 } from "./02-system-os.js";
+import { chapters as c3a } from "./03-parallel-models.js";
+import { chapters as c3b } from "./03-network-storage.js";
+import { chapters as c3c } from "./03-toolchain-slurm.js";
+import { chapters as c4 } from "./04-performance.js";
+import { chapters as c5 } from "./05-accelerator.js";
+import { chapters as c6a } from "./06-slurm-rca.js";
+import { chapters as c6b } from "./06-monitoring-ops.js";
+import { chapters as c6c } from "./06-runbooks.js";
+import { chapters as c7 } from "./07-expert-practice.js";
+
+export const chapters = [
+  ...c1, ...c2,
+  ...c3a, ...c3b, ...c3c,
+  ...c4, ...c5,
+  ...c6a, ...c6b, ...c6c,
+  ...c7
+];
+
+export const stageOrder = [
+  "Foundation",
+  "System / OS",
+  "Parallel / Cluster",
+  "Performance",
+  "Accelerator",
+  "Operations / RCA",
+  "Expert Practice"
+];
+
+export const stageLabels = {
+  "Foundation": "기초",
+  "System / OS": "시스템 / OS",
+  "Parallel / Cluster": "병렬 / 클러스터",
+  "Performance": "성능",
+  "Accelerator": "가속기",
+  "Operations / RCA": "운영 / RCA",
+  "Expert Practice": "실무 심화"
+};
