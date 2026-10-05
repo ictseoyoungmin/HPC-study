@@ -6,6 +6,20 @@ export const sources = Object.freeze({
     license: "GPL-2.0-only framework; verify per-file SPDX",
     usage: "technical-reference"
   },
+  "linux-man-pages": {
+    title: "Linux man-pages",
+    publisher: "Linux man-pages project",
+    url: "https://man7.org/linux/man-pages/",
+    license: "reference-only in HPC Study; verify the notice of any artifact before reuse",
+    usage: "command-reference"
+  },
+  "openmp-spec": {
+    title: "OpenMP Specifications",
+    publisher: "OpenMP Architecture Review Board",
+    url: "https://www.openmp.org/specifications/",
+    license: "reference-only in HPC Study; verify specification terms before reuse",
+    usage: "api-semantics"
+  },
   "mpi-forum": {
     title: "MPI Forum Standards",
     publisher: "MPI Forum",
@@ -39,6 +53,27 @@ export const sources = Object.freeze({
     publisher: "ESnet / Lawrence Berkeley National Laboratory",
     url: "https://software.es.net/iperf/",
     license: "BSD 3-clause",
+    usage: "technical-reference"
+  },
+  "gcc-docs": {
+    title: "GCC Online Documentation",
+    publisher: "GNU Project",
+    url: "https://gcc.gnu.org/onlinedocs/",
+    license: "reference-only in HPC Study; verify manual/source terms before reuse",
+    usage: "technical-reference"
+  },
+  "cmake-docs": {
+    title: "CMake Documentation",
+    publisher: "Kitware",
+    url: "https://cmake.org/documentation/",
+    license: "reference-only in HPC Study; verify upstream terms before reuse",
+    usage: "technical-reference"
+  },
+  "lmod-docs": {
+    title: "Lmod Documentation",
+    publisher: "Lmod project",
+    url: "https://lmod.readthedocs.io/",
+    license: "reference-only in HPC Study; verify upstream terms before reuse",
     usage: "technical-reference"
   },
   "slurm": {
@@ -92,7 +127,7 @@ export const chapterReferences = Object.freeze({
   "shell-text": ["redhat-docs"],
   "ssh-transfer": ["redhat-docs"],
 
-  "process-signals": ["linux-kernel", "redhat-docs"],
+  "process-signals": ["linux-kernel", "linux-man-pages", "redhat-docs"],
   "os-control": ["linux-kernel", "redhat-docs"],
   "virtual-memory": ["linux-kernel", "redhat-docs"],
   "cpu-topology": ["linux-kernel", "intel-sdm", "amd-rocm"],
@@ -101,18 +136,26 @@ export const chapterReferences = Object.freeze({
   "numa": ["linux-kernel", "intel-sdm"],
   "frequency-power": ["linux-kernel", "intel-sdm", "redhat-docs"],
 
+  "pthreads-openmp": ["openmp-spec", "linux-man-pages"],
+  "openmp-advanced": ["openmp-spec"],
   "mpi-basics": ["mpi-forum", "openmpi", "mpich"],
   "mpi-advanced": ["mpi-forum", "openmpi", "mpich"],
-  "network-basics": ["linux-kernel", "openhpc"],
+  "hybrid": ["openmp-spec", "mpi-forum", "slurm"],
+  "network-basics": ["linux-kernel", "linux-man-pages", "openhpc"],
   "rdma-interconnect": ["openmpi", "openhpc"],
   "network-benchmark": ["osu-omb", "iperf3", "openmpi"],
   "storage-stack": ["linux-kernel", "redhat-docs"],
   "parallel-filesystems": ["linux-kernel", "openhpc"],
   "scientific-io": ["mpi-forum", "openmpi", "openhpc"],
+  "compiler-build": ["gcc-docs", "cmake-docs", "openhpc"],
+  "libraries-linking": ["gcc-docs", "openhpc"],
+  "build-repro": ["gcc-docs", "cmake-docs"],
+  "modules": ["lmod-docs", "openhpc"],
   "slurm-basics": ["slurm"],
   "slurm-resources": ["slurm"],
   "slurm-policy": ["slurm"],
   "slurm-advanced": ["slurm"],
+
   "gpu-basics": ["nvidia-cuda", "amd-rocm"],
   "gpu-memory": ["nvidia-cuda", "amd-rocm"],
   "multi-gpu": ["nvidia-cuda", "amd-rocm"],
