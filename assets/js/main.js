@@ -2,7 +2,9 @@ import { chapters, stageOrder, stageLabels } from "./core/curriculum.js";
 import { initTheme } from "./core/theme.js";
 import { state, setLast, isCompleted, toggleCompleted } from "./core/state.js";
 import { hasVisualization, mountVisualization } from "./visualizations/index.js";
+import { codeBlockHtml, bindCodeBlocks, looksLikeShellCode } from "./ui/code-block.js";
 import { sourcesForChapter } from "../../content/sources.js";
+import { codeLessonForChapter } from "../../content/code-lessons.js";
 
 const app = document.querySelector("#app");
 let cleanupVisualization = null;
@@ -29,7 +31,14 @@ function searchText(chapter) {
   const terms = (chapter.terms || []).flatMap(term => [term.term, term.en, term.definition, term.why]);
   const sections = (chapter.sections || []).flatMap(section => [section.title, ...(section.paragraphs || []), section.takeaway]);
   const objectives = chapter.learningObjectives || [];
-  return [chapter.title, chapter.en, chapter.why, ...(chapter.keywords || []), ...terms, ...sections, ...objectives].join(" ").toLowerCase();
+  const codeLesson = codeLessonForChapter(chapter.id);
+  const codeText = codeLesson ? [
+    codeLesson.title,
+    codeLesson.intro,
+    ...(codeLesson.principles || []).flatMap(item => [item.title, item.text]),
+    ...(codeLesson.samples || []).flatMap(sample => [sample.title, sample.filename, sample.description, sample.code])
+  ] : [];
+  return [chapter.title, chapter.en, chapter.why, ...(chapter.keywords || []), ...terms, ...sections, ...objectives, ...codeText].join(" ").toLowerCase();
 }
 
 function groupedFilteredChapters() {
@@ -186,6 +195,24 @@ function exampleHtml(chapter) {
     </section>`;
 }
 
+function codeLessonHtml(chapter) {
+  const lesson = codeLessonForChapter(chapter.id);
+  if (!lesson) return "";
+  return `
+    <section class="lesson code-lesson">
+      <div class="lesson-kicker">명령에서 재사용 가능한 도구로 확장한다</div>
+      <h2>${esc(lesson.title)}</h2>
+      ${lesson.intro ? `<p class="section-intro code-lesson-intro">${esc(lesson.intro)}</p>` : ""}
+      ${(lesson.principles || []).length ? `
+        <div class="code-principles">
+          ${lesson.principles.map(item => `<div class="code-principle"><strong>${esc(item.title)}</strong>${esc(item.text)}</div>`).join("")}
+        </div>` : ""}
+      <div class="code-sample-stack">
+        ${(lesson.samples || []).map(sample => codeBlockHtml(sample)).join("")}
+      </div>
+    </section>`;
+}
+
 function commandsHtml(chapter) {
   if (!(chapter.commands||[]).length) return "";
   return `
@@ -194,17 +221,38 @@ function commandsHtml(chapter) {
       <h2>Linux에서 확인</h2>
       <p class="section-intro">명령어 자체보다 무엇을 확인하기 위해 실행하는지와 어떤 출력이 가설을 지지하는지를 함께 읽는다. 사이트 정책이나 권한에 따라 일부 명령은 제한될 수 있다.</p>
       <div class="command-list">
-        ${chapter.commands.map(cmd => `
-          <article class="command">
-            <div class="command-head">
-              <strong>${esc(cmd.purpose)}</strong>
-              <button class="copy-btn" data-copy="${esc(cmd.cmd)}">Copy</button>
-            </div>
-            <pre><code>${esc(cmd.cmd)}</code></pre>
-            <div class="command-note"><b>관찰:</b> ${esc(cmd.observe || "")}${cmd.caution ? `<br><b>주의:</b> ${esc(cmd.caution)}` : ""}</div>
-          </article>`).join("")}
+        ${chapter.commands.map(cmd => codeBlockHtml({
+          title: cmd.purpose,
+          language: cmd.language || "bash",
+          kind: "command",
+          code: cmd.cmd,
+          observe: cmd.observe || "",
+          caution: cmd.caution || ""
+        })).join("")}
       </div>
     </section>`;
+}
+
+function labStepHtml(step) {
+  if (step && typeof step === "object") {
+    if (step.code) {
+      return codeBlockHtml({
+        title: step.title || step.label || "실행",
+        language: step.language || "bash",
+        kind: step.kind || "command",
+        filename: step.filename || "",
+        code: step.code,
+        description: step.description || "",
+        observe: step.observe || "",
+        caution: step.caution || ""
+      });
+    }
+    return `<div class="lab-step-text">${esc(step.text || step.label || "")}</div>`;
+  }
+  if (looksLikeShellCode(step)) {
+    return codeBlockHtml({ title: "실행", language: "bash", kind: "command", code: step });
+  }
+  return `<div class="lab-step-text">${esc(step)}</div>`;
 }
 
 function labHtml(chapter) {
@@ -214,7 +262,7 @@ function labHtml(chapter) {
     <section class="lesson">
       <div class="lesson-kicker">직접 확인한다</div>
       <h2>실습 · ${esc(chapter.lab.title)}</h2>
-      <ol class="lab-steps">${steps.map(step=>`<li><code>${esc(step)}</code></li>`).join("")}</ol>
+      <ol class="lab-steps">${steps.map(step=>`<li class="lab-step">${labStepHtml(step)}</li>`).join("")}</ol>
       <div class="callout"><b>완료 기준</b><p>${esc(chapter.lab.expect || "")}</p></div>
     </section>`;
 }
@@ -297,6 +345,7 @@ async function renderChapter(id) {
     ${hasVisualization(chapter.id) ? `<section class="lesson visual-lesson"><div class="lesson-kicker">구조와 흐름으로 확인한다</div><h2>개념 시각화</h2><div id="visualization"></div></section>` : ""}
 
     ${exampleHtml(chapter)}
+    ${codeLessonHtml(chapter)}
     ${commandsHtml(chapter)}
     ${labHtml(chapter)}
     ${mistakesHtml(chapter)}
@@ -310,11 +359,7 @@ async function renderChapter(id) {
     </footer>`;
 
   page.querySelectorAll("[data-chapter]").forEach(btn=>btn.addEventListener("click",()=>go(btn.dataset.chapter)));
-  page.querySelectorAll("[data-copy]").forEach(btn=>btn.addEventListener("click",async()=>{
-    const text=btn.dataset.copy;
-    try { await navigator.clipboard.writeText(text); btn.textContent="Copied"; setTimeout(()=>btn.textContent="Copy",900); }
-    catch {}
-  }));
+  bindCodeBlocks(page);
 
   page.querySelector("#complete-btn")?.addEventListener("click", e => {
     const done=toggleCompleted(chapter.id);
