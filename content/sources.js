@@ -156,6 +156,13 @@ export const chapterReferences = Object.freeze({
   "slurm-policy": ["slurm"],
   "slurm-advanced": ["slurm"],
 
+  "scaling": ["slurm", "openmpi", "openmp-spec"],
+  "strong-weak": ["openmpi", "openmp-spec", "slurm"],
+  "perf-method": ["linux-man-pages", "redhat-docs"],
+  "perf-pmu": ["linux-kernel", "intel-sdm"],
+  "roofline": ["intel-sdm", "nvidia-cuda", "amd-rocm"],
+  "debug-tools": ["linux-man-pages", "gcc-docs", "redhat-docs"],
+
   "gpu-basics": ["nvidia-cuda", "amd-rocm"],
   "gpu-memory": ["nvidia-cuda", "amd-rocm"],
   "multi-gpu": ["nvidia-cuda", "amd-rocm"],
