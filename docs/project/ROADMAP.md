@@ -80,9 +80,23 @@
 - [x] TCP/RDMA viewer에 narrow-screen vertical data path 추가
 - [ ] Parallel / Cluster 실제 브라우저 visual QA: 360 / 768 / desktop에서 collision·spacing 미세 조정
 
+### Performance — 1차 완료
+
+- [x] Scale-up/down/out/in과 strong/weak scaling을 자원 배치와 성능 실험의 서로 다른 축으로 재설명
+- [x] Strong/Weak Scaling, Speedup/Efficiency, Amdahl/Gustafson을 curve 해석 중심의 설명형 본문으로 재작성
+- [x] 성능 측정 방법론을 가설 → baseline → 통제 → 반복 → correctness → 판단의 실험 절차로 재작성
+- [x] perf/PMU/counter/sampling/flame graph를 profiling ladder와 evidence 해석 중심으로 재작성
+- [x] Roofline의 arithmetic intensity, ridge point, measured roof, 실제 성능과 모델 상한의 차이를 보강
+- [x] strace/gdb/core dump/memory checker를 증상별 debugging ladder로 재작성
+- [x] 6개 Performance chapter에 objectives / 5+ terms / 3+ sections / worked example / self-check 적용
+- [x] Performance stage를 CI rich-schema 품질 기준에 포함
+- [x] 측정 방법 / profiling / debugging을 text-safe DOM workflow viewer로 추가
+- [x] 반복 benchmark와 perf profiling을 재현 가능한 Bash script code lesson으로 추가
+- [x] Performance chapter References를 기존 Linux/Intel/Slurm/OpenMP/MPI/GPU source registry에 연결
+- [ ] Performance 실제 브라우저 visual QA: 360 / 768 / desktop에서 curve label·workflow spacing 미세 조정
+
 ### 다음 Stage
 
-- [ ] Performance Quality Pass
 - [ ] Accelerator Quality Pass
 - [ ] Operations / RCA Quality Pass
 - [ ] Expert Practice Quality Pass
