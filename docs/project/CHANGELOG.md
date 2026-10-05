@@ -2,6 +2,16 @@
 
 프로젝트 내부 구현의 **요약 기록**이다. 사용자-facing 소개는 루트 `README.md`, 앞으로 할 일은 `ROADMAP.md`, 긴 설계 판단과 QA 기록은 `logs/`에 둔다.
 
+## 2026-10-05 · Command evidence teaching pass
+
+- `content/command-evidence.js`를 추가해 명령을 단순 나열하지 않고 `대표 출력 → 읽을 필드 → 다음 진단 분기`로 연결하는 공통 학습 schema를 도입했다.
+- Foundation / System / Parallel / Performance / Accelerator / Operations / Expert Practice의 핵심 17개 chapter에 representative output 예시를 연결했다.
+- Linux permission, process state, memory, CPU topology/NUMA, MPI placement, filesystem capacity/inode, Slurm pending/accounting, GNU time, perf PMU, GPU, OOM, workload signature, regression fingerprint, ticket context를 첫 coverage로 포함했다.
+- 출력은 학습용 대표 형식임을 UI에서 명시하고 숫자·hostname 자체가 아니라 해석과 next-best-test를 익히도록 구성했다.
+- `command-evidence.css`와 renderer를 추가하고 evidence text도 sidebar 검색 대상에 포함했다.
+- `validate-command-evidence.mjs`를 CI에 연결해 chapter 존재 여부, read point, diagnostic branch, 7개 stage coverage를 검증한다.
+- 상세 작업 기록: `logs/2026-10-05-command-evidence-pass.md`
+
 ## 2026-10-05 · Expert Practice textbook quality pass v2
 
 - Expert Practice 7개 chapter를 `learningObjectives / terms / sections / example / selfCheck` 구조로 보강했다.
