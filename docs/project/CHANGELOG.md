@@ -2,6 +2,16 @@
 
 프로젝트 내부 구현 기록이다. 사용자-facing 소개와 작업 로그를 분리하기 위해 루트 README에는 상세 변경 이력을 두지 않는다.
 
+## 2026-10-05 · Licensing / source governance
+
+- 교재 콘텐츠는 CC BY 4.0, 웹 애플리케이션·시각화 코드는 MIT로 분리했다.
+- `LICENSE-CONTENT`, `LICENSE-CODE`, `NOTICE.md`, `CONTRIBUTING.md`를 추가했다.
+- Linux Kernel, MPI Forum, Open MPI, MPICH, Slurm, NVIDIA CUDA, AMD ROCm, Intel, OpenHPC, Red Hat의 공식 문서와 재사용 조건을 `docs/SOURCES.md`에 정리했다.
+- 외부 문서는 사실 확인 reference로 사용하고 설명·예제·도식·시각화는 직접 제작한다는 정책을 `docs/LICENSING.md`에 명시했다.
+- `assets/js/content/sources.js`에 source registry와 chapter→source mapping을 추가하고, 관련 챕터 하단에 References가 자동 표시되도록 했다.
+- licensing/source metadata와 필수 notice 파일을 검사하는 CI 검증을 추가했다.
+- third-party 파일을 실제로 포함할 때의 관리 규칙을 `assets/third-party/README.md`에 추가했다.
+
 ## 2026-10-05 · Memory / Fabric / Storage / GPU teaching pass
 
 - Cache viewer를 별도 module로 분리하고 hierarchy / coherence / false sharing을 비교하도록 확장했다.
