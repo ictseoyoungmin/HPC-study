@@ -14,6 +14,7 @@ Quality Pass를 완료한 챕터는 가능한 한 다음 순서를 따른다.
 → 한 장으로 정리
 → 개념 시각화
 → 실제 진단 예시
+→ 스크립트 / 소스 코드 예제
 → Linux/Slurm에서 확인
 → 실습
 → 흔한 실수 / Troubleshooting
@@ -44,7 +45,7 @@ Quality Pass를 완료한 챕터는 가능한 한 다음 순서를 따른다.
 
 기능 목록이나 명령어 목록을 본문 설명의 대체물로 사용하지 않는다.
 
-## 4. 명령어와 실습
+## 4. 명령어·코드·실습
 
 명령어는 항상 다음 세 요소를 연결한다.
 
@@ -53,6 +54,30 @@ Quality Pass를 완료한 챕터는 가능한 한 다음 순서를 따른다.
 → 이 명령을 실행하는 목적
 → 출력에서 관찰할 값과 해석 범위
 ```
+
+Bash 명령, shell script, C/C++, Python, Slurm script, 예시 output은 같은 시각 컴포넌트에 문자열로 섞지 않는다. 공통 code-block abstraction을 사용하고 최소한 다음 metadata를 가진다.
+
+```text
+language   # bash / c / cpp / python / slurm / text / output
+kind       # command / script / source / output / config
+filename   # 저장해서 실행하는 예제일 때
+code
+```
+
+표시 규칙은 다음과 같다.
+
+- Bash command는 `Bash · 명령` container로 표시한다.
+- 저장해서 실행하는 shell script는 `Bash · 스크립트 · filename.sh`처럼 command와 구분한다.
+- compiler를 사용하는 병렬 프로그래밍 예제는 source code와 compile/run command를 서로 다른 code block으로 나눈다.
+- output 예시는 실행 명령과 구분해 `Output` block으로 표시한다.
+- 긴 command나 여러 줄 script를 `<li><code>...</code></li>` 형태의 inline text로 표시하지 않는다.
+- 모든 실행 가능한 block은 copy 동작을 제공하되, 목적·관찰값·주의사항은 code 바깥의 설명 영역에 둔다.
+
+Shell scripting은 운영 자동화의 핵심 학습 대상이다. 최소한 다음 세 유형을 구분해 다룬다.
+
+1. **진단 script** — system/job 상태를 재현 가능한 evidence bundle로 수집한다.
+2. **utility script** — log나 command output을 변환·요약하되 원본을 수정하지 않는다.
+3. **automation script** — 여러 입력을 반복 처리하고 exit status를 통해 성공/실패를 다른 도구에 전달한다.
 
 실습은 명령 실행 자체가 아니라 학습자가 설명할 수 있어야 하는 완료 기준을 가진다.
 
@@ -101,10 +126,10 @@ Quality Pass를 완료한 챕터는 가능한 한 다음 순서를 따른다.
 learningObjectives[]
 terms[]              # term / definition / why
 sections[]           # title / 2+ paragraphs / takeaway
-selfCheck[]           # question / answer
+selfCheck[]          # question / answer
 ```
 
-시각화가 있는 핵심 챕터는 visualization registry와 CI required list에 등록한다.
+시각화가 있는 핵심 챕터는 visualization registry와 CI required list에 등록한다. 장문 code lesson은 `content/code-lessons.js`에서 관리하며 language/kind/code와 shell-script shebang을 별도 CI에서 검사한다.
 
 ## 8. 진행 방식
 
