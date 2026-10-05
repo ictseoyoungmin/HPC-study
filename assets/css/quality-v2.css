@@ -1,0 +1,111 @@
+:root{
+  --reading: 900px;
+  --reading-narrow: 780px;
+  --term-bg: color-mix(in srgb,var(--surface) 88%,var(--paper-2));
+  --takeaway-bg: color-mix(in srgb,var(--accent) 8%,var(--surface));
+}
+
+.chapter-header{max-width:var(--reading)}
+.chapter-header p{max-width:var(--reading-narrow);font-size:18px;line-height:1.82;color:var(--muted)}
+.lesson{max-width:var(--reading)}
+.lesson.visual-lesson{max-width:none}
+.lesson-kicker{margin-bottom:7px;color:var(--accent);font:700 11px/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase}
+
+.learning-objectives{padding-top:27px}
+.learning-objectives ol{max-width:var(--reading-narrow);margin:0;padding-left:25px;counter-reset:objective}
+.learning-objectives li{margin:8px 0;padding-left:6px;line-height:1.75}
+
+.term-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:var(--reading)}
+.term-card{min-width:0;padding:16px 17px;border:1px solid var(--rule);border-radius:8px;background:var(--term-bg)}
+.term-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.term-head strong{font-size:18px;line-height:1.35}
+.term-head span{color:var(--soft);font-size:12px}
+.term-card p{margin:0;font-size:15px;line-height:1.72;color:var(--ink)}
+.term-why{display:grid;grid-template-columns:auto 1fr;gap:8px;margin-top:10px;padding-top:9px;border-top:1px solid var(--rule);font-size:13px;line-height:1.6;color:var(--muted)}
+.term-why b{color:var(--accent);white-space:nowrap}
+
+.reading-stack{display:grid;gap:0;max-width:var(--reading-narrow)}
+.reading-section{display:grid;grid-template-columns:42px minmax(0,1fr);gap:15px;padding:24px 0;border-top:1px solid var(--rule)}
+.reading-section:last-child{border-bottom:1px solid var(--rule)}
+.reading-index{padding-top:4px;color:var(--accent);font:700 12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace}
+.reading-copy h3{margin:0 0 11px;font-size:21px;line-height:1.42;letter-spacing:-.015em}
+.reading-copy p{margin:0 0 13px;font-size:17px;line-height:1.86;color:var(--ink)}
+.takeaway{display:grid;grid-template-columns:auto 1fr;gap:11px;margin-top:16px;padding:12px 14px;border-left:3px solid var(--accent);background:var(--takeaway-bg);font-size:14px;line-height:1.66}
+.takeaway b{color:var(--accent)}
+
+.concept-summary{max-width:var(--reading-narrow);border-top:1px solid var(--rule)}
+.concept-summary-row{display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;padding:13px 0;border-bottom:1px solid var(--rule)}
+.concept-summary-row>span{color:var(--accent);font:700 11px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace}
+.concept-summary-row p{margin:0;font-size:15px;line-height:1.72}
+
+.worked-example{max-width:var(--reading)}
+.example-flow{display:grid;gap:8px;max-width:var(--reading-narrow)}
+.example-step{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;padding:12px 14px;border:1px solid var(--rule);border-radius:7px;background:var(--surface)}
+.example-num{display:grid;place-items:center;width:26px;height:26px;border:1px solid var(--rule-strong);border-radius:50%;color:var(--accent);font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace}
+.example-step strong{display:block;margin-bottom:3px;font-size:15px}
+.example-step p{margin:0;font-size:15px;line-height:1.65;color:var(--muted)}
+.callout.subtle{background:color-mix(in srgb,var(--accent-2) 6%,var(--surface));border-left-color:var(--accent-2);max-width:var(--reading-narrow)}
+
+.self-check-list{display:grid;gap:8px;max-width:var(--reading-narrow)}
+.self-check details{border:1px solid var(--rule);border-radius:7px;background:var(--surface);overflow:hidden}
+.self-check summary{display:grid;grid-template-columns:34px minmax(0,1fr);align-items:start;gap:10px;padding:13px 14px;cursor:pointer;font-weight:700;line-height:1.55;list-style:none}
+.self-check summary::-webkit-details-marker{display:none}
+.self-check summary span{color:var(--accent);font:700 11px/1.8 ui-monospace,SFMono-Regular,Menlo,monospace}
+.self-check details p{margin:0;padding:12px 15px 14px 58px;border-top:1px solid var(--rule);font-size:15px;line-height:1.7;color:var(--muted)}
+
+/* Concept-map viewer: text is DOM, not painted into canvas. */
+.system-map-stage{min-height:500px;padding:24px;background:var(--viewer);overflow:hidden}
+.system-map{display:grid;grid-template-columns:minmax(120px,.85fr) 42px minmax(140px,1fr) 42px minmax(180px,1.25fr);grid-template-areas:"user a scheduler b compute" "notes notes notes notes notes";align-items:center;gap:12px;min-height:360px}
+.system-map-node{position:relative;min-width:0;padding:15px 14px;border:1px solid var(--viewer-line);border-radius:8px;background:var(--viewer-side);text-align:center}
+.system-map-node strong{display:block;font-size:15px;line-height:1.4;overflow-wrap:anywhere}
+.system-map-node span{display:block;margin-top:5px;color:var(--viewer-muted);font-size:12px;line-height:1.5}
+.system-map-node.active{border-color:var(--accent);background:var(--viz-accent-bg)}
+.map-user{grid-area:user}.map-scheduler{grid-area:scheduler}.map-compute{grid-area:compute}
+.map-arrow{height:2px;background:var(--viewer-line);position:relative}
+.map-arrow::after{content:"";position:absolute;right:-1px;top:50%;width:7px;height:7px;border-top:2px solid var(--viewer-line);border-right:2px solid var(--viewer-line);transform:translateY(-50%) rotate(45deg)}
+.map-arrow.a{grid-area:a}.map-arrow.b{grid-area:b}
+.compute-stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.compute-chip{padding:9px;border:1px solid var(--viewer-line);border-radius:6px;background:var(--viewer);font-size:12px;line-height:1.45}
+.map-services{grid-area:notes;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.map-service{display:grid;grid-template-columns:42px minmax(0,1fr);gap:12px;align-items:center;padding:13px 14px;border-top:1px solid var(--viewer-line);border-bottom:1px solid var(--viewer-line)}
+.map-service i{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--viz-accent-bg);color:var(--accent);font-style:normal;font-size:11px;font-weight:800}
+.map-service strong{display:block;font-size:14px}.map-service span{display:block;margin-top:3px;color:var(--viewer-muted);font-size:12px;line-height:1.5}
+
+/* Viewer readability and collision prevention. */
+.viz-shell{isolation:isolate}
+.viz-toolbar{padding:10px 12px 10px 15px}
+.viz-toolbar strong{min-width:0;max-width:56ch;overflow-wrap:anywhere}
+.viz-controls{justify-content:flex-end}
+.viz-btn{line-height:1.35;white-space:nowrap}
+.viz-layout{grid-template-columns:minmax(0,1fr) minmax(300px,350px)}
+.viz-explain{overflow-wrap:anywhere}
+.viz-explain h3{font-size:20px;line-height:1.42}
+.viz-explain p,.viz-explain dd{hyphens:auto}
+.three-stage{min-height:500px}
+.canvas-stage.textbook{height:500px;min-height:500px;overflow:hidden}
+.structure-path{max-width:calc(100% - 32px);left:16px!important;right:auto!important;gap:5px!important;flex-wrap:wrap}
+.structure-path span{white-space:nowrap}
+.three-key{max-width:calc(100% - 32px);right:16px!important;bottom:14px!important;flex-wrap:wrap;justify-content:flex-end}
+
+@media(max-width:980px){
+  .term-grid{grid-template-columns:1fr}
+  .viz-layout{grid-template-columns:1fr}
+  .system-map-stage{min-height:0}
+}
+
+@media(max-width:700px){
+  .chapter-header p{font-size:16px;line-height:1.76}
+  .reading-section{grid-template-columns:30px minmax(0,1fr);gap:9px;padding:20px 0}
+  .reading-copy h3{font-size:19px}
+  .reading-copy p{font-size:16px;line-height:1.78}
+  .term-why,.takeaway{grid-template-columns:1fr;gap:4px}
+  .self-check details p{padding-left:14px}
+  .system-map{grid-template-columns:1fr;grid-template-areas:"user" "a" "scheduler" "b" "compute" "notes";gap:10px}
+  .map-arrow{width:2px;height:28px;justify-self:center}
+  .map-arrow::after{right:auto;bottom:-1px;top:auto;left:50%;transform:translateX(-50%) rotate(135deg)}
+  .map-services{grid-template-columns:1fr;margin-top:10px}
+  .compute-stack{grid-template-columns:1fr 1fr}
+  .viz-controls{justify-content:flex-start}
+  .three-stage{min-height:430px}
+  .canvas-stage.textbook{height:440px;min-height:440px}
+}
