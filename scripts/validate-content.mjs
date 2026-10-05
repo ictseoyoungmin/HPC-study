@@ -2,6 +2,7 @@ import { chapters, stageOrder } from "../assets/js/core/curriculum.js";
 import { visualizationIds } from "../assets/js/visualizations/index.js";
 
 const required = ["id","stage","title","en","level","minutes","env","why","concepts","commands","lab","mistakes","troubleshoot","keywords"];
+const qualityRequired = ["learningObjectives","terms","sections","selfCheck"];
 const errors = [];
 const ids = new Set();
 
@@ -23,13 +24,34 @@ chapters.forEach((chapter, index) => {
   if (chapter.lab && (!chapter.lab.title || !Array.isArray(chapter.lab.steps) || !chapter.lab.expect)) {
     errors.push(`${at}: invalid lab schema`);
   }
+
+  if (chapter.stage === "Foundation") {
+    for (const key of qualityRequired) {
+      if (!Array.isArray(chapter[key]) || !chapter[key].length) errors.push(`${at}: Foundation quality pass requires ${key}`);
+    }
+    if ((chapter.learningObjectives || []).length < 3) errors.push(`${at}: requires at least 3 learning objectives`);
+    if ((chapter.terms || []).length < 5) errors.push(`${at}: requires at least 5 defined terms`);
+    if ((chapter.sections || []).length < 3) errors.push(`${at}: requires at least 3 explanatory sections`);
+    if ((chapter.selfCheck || []).length < 3) errors.push(`${at}: requires at least 3 self-check questions`);
+    for (const [i, term] of (chapter.terms || []).entries()) {
+      if (!term.term || !term.definition || !term.why) errors.push(`${at}: term[${i}] must include term/definition/why`);
+    }
+    for (const [i, section] of (chapter.sections || []).entries()) {
+      if (!section.title || !Array.isArray(section.paragraphs) || section.paragraphs.length < 2 || !section.takeaway) {
+        errors.push(`${at}: section[${i}] must include title, 2+ paragraphs, takeaway`);
+      }
+    }
+    for (const [i, check] of (chapter.selfCheck || []).entries()) {
+      if (!check.question || !check.answer) errors.push(`${at}: selfCheck[${i}] must include question/answer`);
+    }
+  }
 });
 
 for (const id of visualizationIds) {
   if (!ids.has(id)) errors.push(`Visualization points to missing chapter: ${id}`);
 }
 
-for (const id of ["cluster-architecture","cpu-topology","cache-coherence","virtual-memory","numa","mpi-basics","network-basics","rdma-interconnect","network-benchmark","storage-stack","parallel-filesystems","scientific-io","slurm-basics","scaling","strong-weak","gpu-basics","gpu-memory","multi-gpu"]) {
+for (const id of ["hpc-aa-role","cluster-architecture","cpu-topology","cache-coherence","virtual-memory","numa","mpi-basics","network-basics","rdma-interconnect","network-benchmark","storage-stack","parallel-filesystems","scientific-io","slurm-basics","scaling","strong-weak","gpu-basics","gpu-memory","multi-gpu"]) {
   if (!visualizationIds.includes(id)) errors.push(`Required teaching visualization missing: ${id}`);
 }
 
