@@ -1,4 +1,5 @@
 import { mountHpcOverview } from "./hpc-overview.js";
+import { mountProcessModel, mountOsControl } from "./system-os-map.js";
 import { mountCpu } from "./cpu-topology.js";
 import { mountNuma } from "./numa.js";
 import { mountMpi } from "./mpi.js";
@@ -17,6 +18,8 @@ import { mountRoofline } from "./roofline.js";
 
 const mounts = {
   "hpc-aa-role": mountHpcOverview,
+  "process-signals": mountProcessModel,
+  "os-control": mountOsControl,
   "cpu-topology": mountCpu,
   "cache-coherence": mountCacheCoherence,
   "virtual-memory": mountVirtualMemory,
