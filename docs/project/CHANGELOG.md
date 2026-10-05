@@ -2,6 +2,16 @@
 
 프로젝트 내부 구현 기록이다. 사용자-facing 소개와 작업 로그를 분리하기 위해 루트 README에는 상세 변경 이력을 두지 않는다. 큰 작업의 상세 설계·검수 메모는 `logs/`에 둔다.
 
+## 2026-10-05 · Code block / shell scripting learning pass
+
+- Bash command를 inline `<code>`가 아니라 language-aware `Bash · 명령` block으로 렌더링하도록 공통 code-block UI를 추가했다.
+- multiline shell lab step도 같은 Bash container로 렌더링하고 copy 동작은 source text node를 기준으로 처리하도록 바꿨다.
+- `content/code-lessons.js`를 추가해 교육용 source code를 UI 코드와 분리했다.
+- `Shell·환경변수·텍스트 처리` 챕터에 진단 baseline 수집, log utility, 반복 검사 automation의 3가지 shell script 예제를 추가했다.
+- code block schema는 Bash뿐 아니라 C/C++, Python, Slurm script, config, output까지 확장할 수 있도록 language/kind/filename/code metadata를 사용한다.
+- `validate-code-lessons.mjs`를 CI에 연결해 chapter id, language/kind, sample id, shell-script shebang을 검사한다.
+- `CONTENT-QUALITY.md`에 command/script/source/output 표시 원칙과 shell scripting 학습 기준을 추가했다.
+
 ## 2026-10-05 · Parallel / Cluster textbook quality pass v2
 
 - Parallel / Cluster 19개 챕터를 설명형 rich schema로 보강하고 CI 품질 기준에 포함했다.
