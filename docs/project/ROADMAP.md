@@ -95,9 +95,24 @@
 - [x] Performance chapter References를 기존 Linux/Intel/Slurm/OpenMP/MPI/GPU source registry에 연결
 - [ ] Performance 실제 브라우저 visual QA: 360 / 768 / desktop에서 curve label·workflow spacing 미세 조정
 
+### Accelerator — 1차 완료
+
+- [x] GPU execution model을 Grid / Block / Warp / Thread / Occupancy / Coalescing 관계 중심으로 재작성
+- [x] GPU memory chapter를 H2D/D2H, pinned memory, streams, overlap, Unified Memory의 실제 data path 중심으로 재작성
+- [x] Multi-GPU chapter를 rank→GPU→CPU/NUMA→NIC topology, NCCL collective, GPUDirect RDMA, MIG/MPS 경계 중심으로 재작성
+- [x] GPU profiling chapter를 Nsight Systems → hot region → Nsight Compute의 profiling ladder로 재작성
+- [x] Distributed training chapter를 dataloader → H2D → forward/backward → AllReduce → optimizer → checkpoint의 end-to-end step으로 재작성
+- [x] HPC container chapter를 image → bind → kernel/driver → MPI/transport 경계와 provenance 관점으로 재작성
+- [x] 6개 Accelerator chapter에 objectives / 5+ terms / 3+ sections / worked example / self-check 적용
+- [x] Accelerator stage를 CI rich-schema 품질 기준에 포함
+- [x] GPU fundamentals / data movement / multi-GPU viewer를 text-safe responsive DOM layout으로 교체
+- [x] GPU profiling timeline과 kernel-metric decision viewer 추가
+- [x] Distributed training step과 HPC container boundary를 DOM concept viewer로 추가
+- [x] AI/HPC chapter를 기존 NVIDIA/AMD/Slurm/Open MPI source registry에 연결
+- [ ] Accelerator 실제 브라우저 visual QA: 360 / 768 / desktop에서 timeline bar·card spacing 미세 조정
+
 ### 다음 Stage
 
-- [ ] Accelerator Quality Pass
 - [ ] Operations / RCA Quality Pass
 - [ ] Expert Practice Quality Pass
 
@@ -106,7 +121,7 @@
 - [x] Linux storage stack: page cache → filesystem → block layer → device / shared FS
 - [x] Scientific I/O: rank-per-file vs shared file vs collective MPI-IO / HDF5 / staging
 - [x] Network benchmark: message-size latency/bandwidth curve, topology comparison, median/p95
-- [ ] GPU profiling: CPU/GPU timeline과 idle gap
+- [x] GPU profiling: CPU/GPU timeline과 idle gap / overlap / hot-kernel drill-down
 - [ ] Slurm RCA: pending reason / OOM / node failure evidence timeline
 - [ ] Monitoring: CPU-memory-network-storage-GPU time correlation
 
