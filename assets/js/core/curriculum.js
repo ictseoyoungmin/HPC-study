@@ -7,6 +7,7 @@ import { enhancements as q3a } from "../../../content/enrichments/03-parallel-mo
 import { enhancements as q3b } from "../../../content/enrichments/03-network-storage.js";
 import { enhancements as q3c } from "../../../content/enrichments/03-toolchain-slurm.js";
 import { chapters as c4 } from "../../../content/chapters/04-performance.js";
+import { enhancements as q4 } from "../../../content/enrichments/04-performance.js";
 import { chapters as c5 } from "../../../content/chapters/05-accelerator.js";
 import { chapters as c6a } from "../../../content/chapters/06-slurm-rca.js";
 import { chapters as c6b } from "../../../content/chapters/06-monitoring-ops.js";
@@ -14,12 +15,12 @@ import { chapters as c6c } from "../../../content/chapters/06-runbooks.js";
 import { chapters as c7 } from "../../../content/chapters/07-expert-practice.js";
 
 const quality3 = Object.freeze({ ...q3a, ...q3b, ...q3c });
-const enrich = list => list.map(chapter => quality3[chapter.id] ? { ...chapter, ...quality3[chapter.id] } : chapter);
+const enrich = (list, quality) => list.map(chapter => quality[chapter.id] ? { ...chapter, ...quality[chapter.id] } : chapter);
 
 export const chapters = [
   ...c1, ...c2,
-  ...enrich(c3a), ...enrich(c3b), ...enrich(c3c),
-  ...c4, ...c5,
+  ...enrich(c3a, quality3), ...enrich(c3b, quality3), ...enrich(c3c, quality3),
+  ...enrich(c4, q4), ...c5,
   ...c6a, ...c6b, ...c6c,
   ...c7
 ];
