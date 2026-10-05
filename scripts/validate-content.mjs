@@ -3,7 +3,7 @@ import { visualizationIds } from "../assets/js/visualizations/index.js";
 
 const required = ["id","stage","title","en","level","minutes","env","why","concepts","commands","lab","mistakes","troubleshoot","keywords"];
 const qualityRequired = ["learningObjectives","terms","sections","selfCheck"];
-const qualityStages = new Set(["Foundation", "System / OS", "Parallel / Cluster"]);
+const qualityStages = new Set(["Foundation", "System / OS", "Parallel / Cluster", "Performance"]);
 const errors = [];
 const ids = new Set();
 
@@ -56,7 +56,8 @@ for (const id of [
   "hpc-aa-role","cluster-architecture",
   "process-signals","os-control","cpu-topology","cache-coherence","virtual-memory","numa",
   "pthreads-openmp","openmp-advanced","hybrid","mpi-basics","network-basics","rdma-interconnect","network-benchmark","storage-stack","parallel-filesystems","scientific-io","slurm-basics",
-  "scaling","strong-weak","gpu-basics","gpu-memory","multi-gpu"
+  "scaling","strong-weak","perf-method","perf-pmu","roofline","debug-tools",
+  "gpu-basics","gpu-memory","multi-gpu"
 ]) {
   if (!visualizationIds.includes(id)) errors.push(`Required teaching visualization missing: ${id}`);
 }
