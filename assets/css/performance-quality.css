@@ -1,0 +1,16 @@
+.perf-method-viz .perf-method-body{padding:22px;background:var(--viewer)}
+.perf-method-viz .perf-method-body>header{max-width:860px;margin:0 0 18px}
+.perf-method-viz .perf-method-body h3{margin:0 0 8px;font-size:22px;line-height:1.35;color:var(--viewer-text)}
+.perf-method-viz .perf-method-body header p{margin:0;color:var(--viewer-muted);font-size:15px;line-height:1.72}
+.perf-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.perf-flow-step{position:relative;display:grid;grid-template-columns:34px minmax(0,1fr);gap:11px;min-width:0;padding:15px;border:1px solid var(--viewer-line);border-radius:7px;background:var(--viewer-side)}
+.perf-flow-step::after{content:"";position:absolute;right:-13px;top:50%;width:12px;height:1px;background:var(--viewer-line)}
+.perf-flow-step:nth-child(3n)::after,.perf-flow-step:last-child::after{display:none}
+.perf-step-num{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:var(--viz-accent-bg);color:var(--accent);font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace}
+.perf-flow-step strong{display:block;margin-bottom:4px;font-size:15px;color:var(--viewer-text)}
+.perf-flow-step p{margin:0;color:var(--viewer-muted);font-size:14px;line-height:1.62;overflow-wrap:anywhere}
+.perf-flow-note{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;margin-top:14px;padding:13px 14px;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--viewer-side));font-size:14px;line-height:1.65}
+.perf-flow-note b{color:var(--viewer-text)}
+.perf-flow-note span{color:var(--viewer-muted)}
+@media(max-width:900px){.perf-flow{grid-template-columns:repeat(2,minmax(0,1fr))}.perf-flow-step:nth-child(3n)::after{display:block}.perf-flow-step:nth-child(2n)::after{display:none}}
+@media(max-width:620px){.perf-method-viz .perf-method-body{padding:16px}.perf-flow{grid-template-columns:1fr}.perf-flow-step::after{display:none!important}.perf-flow-note{grid-template-columns:1fr}.perf-method-viz .viz-controls{width:100%}.perf-method-viz .viz-btn{flex:1 1 auto}}
