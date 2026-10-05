@@ -1,6 +1,6 @@
 import { chapters, stageOrder, stageLabels } from "./core/curriculum.js";
 import { initTheme } from "./core/theme.js";
-import { state, setLast, isCompleted, toggleCompleted, completedCount } from "./core/state.js";
+import { state, setLast, isCompleted, toggleCompleted } from "./core/state.js";
 import { hasVisualization, mountVisualization } from "./visualizations/index.js";
 import { sourcesForChapter } from "../../content/sources.js";
 
@@ -25,12 +25,18 @@ function chapterIndex(id) {
   return Math.max(0, chapters.findIndex(ch => ch.id === id));
 }
 
+function searchText(chapter) {
+  const terms = (chapter.terms || []).flatMap(term => [term.term, term.en, term.definition, term.why]);
+  const sections = (chapter.sections || []).flatMap(section => [section.title, ...(section.paragraphs || []), section.takeaway]);
+  const objectives = chapter.learningObjectives || [];
+  return [chapter.title, chapter.en, chapter.why, ...(chapter.keywords || []), ...terms, ...sections, ...objectives].join(" ").toLowerCase();
+}
+
 function groupedFilteredChapters() {
   const q = searchQuery.trim().toLowerCase();
   const map = new Map(stageOrder.map(stage => [stage, []]));
   chapters.forEach(ch => {
-    const hay = [ch.title,ch.en,ch.why,...(ch.keywords||[])].join(" ").toLowerCase();
-    if (!q || hay.includes(q)) map.get(ch.stage)?.push(ch);
+    if (!q || searchText(ch).includes(q)) map.get(ch.stage)?.push(ch);
   });
   return map;
 }
@@ -44,7 +50,7 @@ function renderShell() {
           <span>Application Analyst 학습 교재</span>
         </div>
         <div class="search-wrap">
-          <input id="search" type="search" placeholder="챕터 검색" autocomplete="off">
+          <input id="search" type="search" placeholder="챕터·용어 검색" autocomplete="off">
         </div>
         <nav id="chapter-nav" class="chapter-nav"></nav>
       </aside>
@@ -97,23 +103,96 @@ function renderNav(activeId) {
   });
 }
 
-function conceptsHtml(chapter) {
+function objectivesHtml(chapter) {
+  if (!(chapter.learningObjectives || []).length) return "";
   return `
-    <div class="concept-list">
-      ${(chapter.concepts||[]).map((text,i) => `
-        <div class="concept-row">
-          <span>${String(i+1).padStart(2,"0")}</span>
-          <p>${esc(text)}</p>
-        </div>`).join("")}
-    </div>`;
+    <section class="lesson learning-objectives">
+      <div class="lesson-kicker">이 장을 읽고 나면</div>
+      <h2>학습 목표</h2>
+      <ol>${chapter.learningObjectives.map(item => `<li>${esc(item)}</li>`).join("")}</ol>
+    </section>`;
+}
+
+function termsHtml(chapter) {
+  if (!(chapter.terms || []).length) return "";
+  return `
+    <section class="lesson terminology">
+      <div class="lesson-kicker">먼저 언어를 맞춘다</div>
+      <h2>핵심 용어</h2>
+      <p class="section-intro">이 장에서 반복해서 사용할 용어를 먼저 정의한다. 영문 약어를 외우기보다 시스템에서 무엇을 가리키는지 연결해 읽는다.</p>
+      <div class="term-grid">
+        ${chapter.terms.map(term => `
+          <article class="term-card">
+            <div class="term-head"><strong>${esc(term.term)}</strong>${term.en ? `<span>${esc(term.en)}</span>` : ""}</div>
+            <p>${esc(term.definition)}</p>
+            ${term.why ? `<div class="term-why"><b>왜 중요한가</b><span>${esc(term.why)}</span></div>` : ""}
+          </article>`).join("")}
+      </div>
+    </section>`;
+}
+
+function sectionsHtml(chapter) {
+  if (!(chapter.sections || []).length) return "";
+  return `
+    <section class="lesson textbook-reading">
+      <div class="lesson-kicker">개념을 문맥으로 이해한다</div>
+      <h2>본문</h2>
+      <div class="reading-stack">
+        ${chapter.sections.map((section, index) => `
+          <section class="reading-section">
+            <div class="reading-index">${String(index + 1).padStart(2,"0")}</div>
+            <div class="reading-copy">
+              <h3>${esc(section.title)}</h3>
+              ${(section.paragraphs || []).map(p => `<p>${esc(p)}</p>`).join("")}
+              ${section.takeaway ? `<div class="takeaway"><b>핵심</b><span>${esc(section.takeaway)}</span></div>` : ""}
+            </div>
+          </section>`).join("")}
+      </div>
+    </section>`;
+}
+
+function conceptsHtml(chapter) {
+  if (!(chapter.concepts || []).length) return "";
+  return `
+    <section class="lesson concept-summary-section">
+      <div class="lesson-kicker">읽은 내용을 다시 압축한다</div>
+      <h2>한 장으로 정리</h2>
+      <div class="concept-summary">
+        ${(chapter.concepts||[]).map((text,i) => `
+          <div class="concept-summary-row">
+            <span>${String(i+1).padStart(2,"0")}</span>
+            <p>${esc(text)}</p>
+          </div>`).join("")}
+      </div>
+    </section>`;
+}
+
+function exampleHtml(chapter) {
+  if (!chapter.example) return "";
+  const example = chapter.example;
+  return `
+    <section class="lesson worked-example">
+      <div class="lesson-kicker">개념을 진단 흐름에 연결한다</div>
+      <h2>${esc(example.title || "예제로 연결")}</h2>
+      ${example.intro ? `<p class="section-intro">${esc(example.intro)}</p>` : ""}
+      <div class="example-flow">
+        ${(example.steps || []).map((step, index) => `
+          <div class="example-step">
+            <span class="example-num">${index + 1}</span>
+            <div><strong>${esc(step.label)}</strong><p>${esc(step.text)}</p></div>
+          </div>`).join("")}
+      </div>
+      ${example.conclusion ? `<div class="callout subtle"><b>정리</b><p>${esc(example.conclusion)}</p></div>` : ""}
+    </section>`;
 }
 
 function commandsHtml(chapter) {
   if (!(chapter.commands||[]).length) return "";
   return `
     <section class="lesson">
+      <div class="lesson-kicker">관찰 가능한 증거로 확인한다</div>
       <h2>Linux에서 확인</h2>
-      <p class="section-intro">명령의 목적과 관찰할 값을 함께 읽는다. 사이트 정책이나 권한에 따라 일부 명령은 제한될 수 있다.</p>
+      <p class="section-intro">명령어 자체보다 무엇을 확인하기 위해 실행하는지와 어떤 출력이 가설을 지지하는지를 함께 읽는다. 사이트 정책이나 권한에 따라 일부 명령은 제한될 수 있다.</p>
       <div class="command-list">
         ${chapter.commands.map(cmd => `
           <article class="command">
@@ -133,6 +212,7 @@ function labHtml(chapter) {
   const steps = chapter.lab.steps || [];
   return `
     <section class="lesson">
+      <div class="lesson-kicker">직접 확인한다</div>
       <h2>실습 · ${esc(chapter.lab.title)}</h2>
       <ol class="lab-steps">${steps.map(step=>`<li><code>${esc(step)}</code></li>`).join("")}</ol>
       <div class="callout"><b>완료 기준</b><p>${esc(chapter.lab.expect || "")}</p></div>
@@ -143,12 +223,30 @@ function mistakesHtml(chapter) {
   return `
     <section class="lesson split">
       <div>
+        <div class="lesson-kicker">오판을 줄인다</div>
         <h2>흔한 실수</h2>
         <ul class="plain-list">${(chapter.mistakes||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
       </div>
       <div>
+        <div class="lesson-kicker">AA 관점으로 좁힌다</div>
         <h2>Troubleshooting 관점</h2>
         <p>${esc(chapter.troubleshoot || "")}</p>
+      </div>
+    </section>`;
+}
+
+function selfCheckHtml(chapter) {
+  if (!(chapter.selfCheck || []).length) return "";
+  return `
+    <section class="lesson self-check">
+      <div class="lesson-kicker">설명할 수 있는지 확인한다</div>
+      <h2>Self-check</h2>
+      <div class="self-check-list">
+        ${chapter.selfCheck.map((item, index) => `
+          <details>
+            <summary><span>Q${index + 1}</span>${esc(item.question)}</summary>
+            <p>${esc(item.answer)}</p>
+          </details>`).join("")}
       </div>
     </section>`;
 }
@@ -191,16 +289,18 @@ async function renderChapter(id) {
       <div class="chapter-meta">${esc(chapter.level)} · 약 ${chapter.minutes}분 · ${(chapter.env||[]).map(esc).join(" / ")}</div>
     </header>
 
-    <section class="lesson">
-      <h2>핵심 개념</h2>
-      ${conceptsHtml(chapter)}
-    </section>
+    ${objectivesHtml(chapter)}
+    ${termsHtml(chapter)}
+    ${sectionsHtml(chapter)}
+    ${conceptsHtml(chapter)}
 
-    ${hasVisualization(chapter.id) ? `<section class="lesson visual-lesson"><h2>개념 시각화</h2><div id="visualization"></div></section>` : ""}
+    ${hasVisualization(chapter.id) ? `<section class="lesson visual-lesson"><div class="lesson-kicker">구조와 흐름으로 확인한다</div><h2>개념 시각화</h2><div id="visualization"></div></section>` : ""}
 
+    ${exampleHtml(chapter)}
     ${commandsHtml(chapter)}
     ${labHtml(chapter)}
     ${mistakesHtml(chapter)}
+    ${selfCheckHtml(chapter)}
     ${referencesHtml(chapter)}
 
     <footer class="pager">
@@ -238,7 +338,7 @@ function onRoute() {
 renderShell();
 window.addEventListener("hashchange",onRoute);
 document.addEventListener("keydown", e => {
-  if (e.target.matches("input,textarea,select")) return;
+  if (e.target.matches("input,textarea,select,button,summary")) return;
   const i=chapterIndex(routeId());
   if (e.key==="ArrowLeft" || e.key==="PageUp") { if (chapters[i-1]) go(chapters[i-1].id); }
   if (e.key==="ArrowRight" || e.key==="PageDown") { if (chapters[i+1]) go(chapters[i+1].id); }
