@@ -11,13 +11,15 @@ HPC Study는 챕터 수와 시각화 수가 계속 늘어나는 것을 전제로
 ```text
 index.html
 ├─ content/                      CC BY 4.0 educational data
-│  ├─ chapters/                  62-chapter curriculum modules
+│  ├─ chapters/                  62-chapter base curriculum modules
+│  ├─ enrichments/               Quality Pass rich-schema overlays
 │  └─ sources.js                 source registry / chapter references
 └─ assets/
    ├─ css/
    │  ├─ app.css                 base UI / theme
    │  ├─ quality-v2.css          rich textbook content / common visual rules
-   │  └─ system-os-v2.css        System / OS DOM viewer layouts
+   │  ├─ system-os-v2.css        System / OS DOM viewer layouts
+   │  └─ parallel-quality.css    Parallel / Cluster DOM viewer layouts
    └─ js/                        MIT application code
       ├─ main.js                 routing / page rendering
       ├─ core/                   theme / state / curriculum assembly
@@ -26,7 +28,7 @@ index.html
 
 ### Content
 
-`content/chapters/`의 챕터 객체가 교재의 source of truth다. 모든 챕터는 최소 schema를 유지한다.
+`content/chapters/`의 챕터 객체가 기본 curriculum을 정의한다. 모든 챕터는 최소 schema를 유지한다.
 
 ```text
 id / stage / title / en / level / minutes / env
@@ -47,11 +49,13 @@ selfCheck[]
   question / answer
 ```
 
-현재 `Foundation`과 `System / OS`가 이 rich schema를 CI에서 강제한다. 이후 stage도 Quality Pass가 끝나는 순서대로 같은 검증 집합에 추가한다.
+현재 `Foundation`, `System / OS`, `Parallel / Cluster`가 이 rich schema를 CI에서 강제한다. 이후 stage도 Quality Pass가 끝나는 순서대로 같은 검증 집합에 추가한다.
 
 `concepts[]`는 더 이상 본문을 대체하지 않는다. 설명형 본문을 읽은 뒤 핵심을 다시 압축하는 summary로 사용한다.
 
-`assets/js/core/curriculum.js`는 content module을 순서대로 조립할 뿐 교재 문장을 보유하지 않는다. Navigation, progress, pagination은 최종 chapter array에서 자동 파생한다.
+Parallel / Cluster에서는 기존 3개 base module을 유지하면서 `content/enrichments/03-*.js`에 설명형 schema를 분리했다. `assets/js/core/curriculum.js`가 chapter id 기준으로 base object와 enrichment를 merge한다. 이 구조는 대규모 재작성 중에도 기존 명령어/실습/최소 schema를 안정적으로 보존하면서 editorial content를 독립적으로 리뷰하기 위한 전환 구조다. 향후 base module 자체를 rich schema로 통합할 수 있지만, 사용자-facing 결과와 CI 기준은 merge된 최종 chapter object를 기준으로 한다.
+
+`assets/js/core/curriculum.js`는 content module을 순서대로 조립하고 enrichment를 합칠 뿐 교재 문장을 직접 보유하지 않는다. Navigation, progress, pagination은 최종 chapter array에서 자동 파생한다.
 
 `content/sources.js`는 외부 reference의 canonical registry와 chapter→source mapping을 관리한다. 페이지의 References는 이 데이터에서 자동 생성한다.
 
@@ -83,16 +87,17 @@ Header / why
 ```text
 hpc-overview.js          DOM-based system map / AA diagnostic map
 system-os-map.js         process model / task state / cgroup / namespace-service DOM maps
+parallel-models.js       thread sharing / OpenMP schedule / hybrid placement DOM maps
 cluster3d-v2.js          Core → Socket → Node → Cluster / central fabric hub
 cpu-topology.js          Socket / Core / SMT / binding
 cache-coherence.js       hierarchy / coherence / false sharing
 virtual-memory.js        translation / faults / pressure
 numa.js                  local / remote / first-touch
-mpi.js                   P2P / broadcast / allreduce
-network-rdma.js          TCP / RDMA / UCX-libfabric
+mpi.js                   P2P / tree broadcast / non-crossing allreduce ring
+network-rdma.js          TCP / RDMA / UCX-libfabric with narrow vertical path
 network-benchmark.js     latency / bandwidth / topology / median-p95
 storage-stack.js         page cache / filesystem / block / device / shared FS
-parallel-filesystem.js   metadata / striping / small files
+parallel-filesystem.js   metadata bus / 1:1 striping / small-file queue
 scientific-io.js         rank-per-file / collective MPI-IO / HDF5 / staging
 slurm.js                 job lifecycle / resource allocation
 resource-scaling.js      scale up/down/out/in
@@ -114,7 +119,7 @@ Canvas는 다음과 같이 좌표가 의미를 갖는 경우에 우선 사용한
 - dynamic packet / data movement
 - topology whose labels are short and bounded
 
-Network topology에서 교육적 이유가 없는 all-to-all line은 피하고 switch/fabric hub 또는 계층형 connector를 사용한다. System / OS viewer에서는 desktop과 narrow layout을 별도로 두고, narrow 화면에서 두 topology domain을 억지로 가로 배치하지 않는다.
+Network topology에서 교육적 이유가 없는 all-to-all line은 피하고 switch/fabric hub 또는 계층형 connector를 사용한다. Broadcast는 tree, allreduce는 ring처럼 **communication pattern 자체가 connector shape의 이유가 되는 경우**에만 연결선을 사용한다. 작은 화면에서는 같은 개념을 세로 path나 stacked domain으로 재배치하고, desktop 그림을 단순 축소하지 않는다.
 
 ### Theme
 
@@ -123,8 +128,8 @@ CSS와 Canvas는 semantic token을 공유한다. Canvas 코드에서 Light/Dark 
 ## 새 챕터 추가
 
 1. 해당 stage의 `content/chapters/` module에 chapter object를 추가한다.
-2. Quality Pass 대상이면 rich schema를 `CONTENT-QUALITY.md` 기준으로 작성한다.
-3. 필요하면 `content/sources.js`에 source mapping을 추가한다.
+2. Quality Pass 대상이면 rich schema를 `CONTENT-QUALITY.md` 기준으로 작성한다. 전환 중인 stage는 `content/enrichments/` overlay를 사용할 수 있다.
+3. 필요하면 `content/sources.js`와 `docs/SOURCES.md`에 source를 추가하고 chapter mapping을 연결한다.
 4. 시각화가 필요하면 `assets/js/visualizations/`에 독립 module을 작성한다.
 5. registry에 chapter id를 연결한다.
 6. 핵심 viewer라면 `scripts/validate-content.mjs`의 required visualization 목록을 갱신한다.
@@ -145,6 +150,6 @@ CI는 교재 파일이 다시 `assets/js/content/` 아래로 들어가는 것을
 - 긴 설명은 DOM side panel에 두고 Canvas label은 짧게 유지한다.
 - 박스에 글자를 맞추기 위해 폰트를 지나치게 축소하지 않는다.
 - 대각선 connector crossing과 의미 없는 all-to-all line을 줄인다.
-- 작은 화면에서는 column을 stack하고 설명 패널의 읽기 가능성을 우선한다.
+- 작은 화면에서는 column을 stack하거나 end-to-end path를 세로로 재배치하고 설명 패널의 읽기 가능성을 우선한다.
 - 애니메이션은 data movement를 설명할 때만 사용하며 시각적 효과 자체를 목적으로 하지 않는다.
 - 실제 hardware 수치나 vendor-specific 동작을 일반화하지 않고 topology/site별 확인 필요성을 명시한다.
