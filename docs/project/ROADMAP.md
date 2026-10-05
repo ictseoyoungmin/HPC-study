@@ -63,9 +63,25 @@
 - [x] CPU topology / cache / virtual memory / NUMA viewer의 connector·responsive layout 코드 1차 정리
 - [ ] System / OS 실제 브라우저 visual QA: 360 / 768 / desktop에서 collision·spacing 미세 조정
 
+### Parallel / Cluster — 1차 완료
+
+- [x] Pthreads/OpenMP와 advanced scheduling/task/affinity 설명형 본문 재작성
+- [x] MPI fundamentals / nonblocking / RMA / topology 설명형 본문 재작성
+- [x] Hybrid MPI+OpenMP placement / NUMA / thread-level 설명형 본문 재작성
+- [x] TCP/IP / RDMA / UCX-libfabric / network benchmark 설명형 본문 재작성
+- [x] Linux storage / parallel filesystem / scientific I/O 설명형 본문 재작성
+- [x] Compiler / linking / sanitizer-build / Modules-Lmod 설명형 본문 재작성
+- [x] Slurm fundamentals / resources / scheduling policy / advanced workflow 설명형 본문 재작성
+- [x] 19개 Parallel / Cluster chapter에 objectives / 5+ terms / 3+ sections / worked example / self-check 적용
+- [x] Parallel / Cluster stage를 CI rich-schema 품질 기준에 포함
+- [x] OpenMP / scheduling / hybrid placement를 text-safe DOM viewer로 추가
+- [x] MPI broadcast의 root-to-all 선을 tree view로, allreduce는 non-crossing ring으로 재설계
+- [x] Parallel filesystem striping을 1:1 extent→target connector로 바꾸고 small-file metadata queue를 별도 시각화
+- [x] TCP/RDMA viewer에 narrow-screen vertical data path 추가
+- [ ] Parallel / Cluster 실제 브라우저 visual QA: 360 / 768 / desktop에서 collision·spacing 미세 조정
+
 ### 다음 Stage
 
-- [ ] Parallel / Cluster Quality Pass
 - [ ] Performance Quality Pass
 - [ ] Accelerator Quality Pass
 - [ ] Operations / RCA Quality Pass
