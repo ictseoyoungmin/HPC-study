@@ -66,7 +66,9 @@ function drawP2P(ctx, w, h, t) {
   [left,right].forEach((n,i)=>{
     roundRect(ctx,n.x,n.y,n.w,n.h,10,css("--viewer-side"),css("--viewer-line"));
     label(ctx,`Compute Node ${i}`,n.x+14,n.y+18,{align:"left",size:12,color:css("--viewer-muted")});
-    box(ctx,n.x+22,n.y+48,n.w-44,72,`rank ${i?5:0}\nprivate memory`,{accent:true,size:11});
+    roundRect(ctx,n.x+22,n.y+48,n.w-44,72,7,css("--viz-accent-bg"),css("--accent"));
+    label(ctx,`rank ${i?5:0}`,n.x+n.w/2,n.y+72,{size:12});
+    label(ctx,"private memory",n.x+n.w/2,n.y+98,{size:10,color:css("--viewer-muted")});
     box(ctx,n.x+22,n.y+n.h-58,n.w-44,38,"NIC / MPI transport",{size:10});
     arrow(ctx,n.x+n.w/2,n.y+120,n.x+n.w/2,n.y+n.h-61,css("--viewer-line"),2);
   });
