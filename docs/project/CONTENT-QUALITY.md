@@ -81,13 +81,39 @@ Shell scripting은 운영 자동화의 핵심 학습 대상이다. 최소한 다
 
 실습은 명령 실행 자체가 아니라 학습자가 설명할 수 있어야 하는 완료 기준을 가진다.
 
-## 5. Self-check
+## 5. Performance 측정 원칙
+
+Performance 챕터는 도구 이름보다 실험 설계와 evidence chain을 먼저 가르친다.
+
+기본 순서는 다음과 같다.
+
+```text
+질문 / 가설
+→ baseline
+→ 통제 변수
+→ 반복 측정
+→ correctness 검증
+→ profile / counter
+→ 변경
+→ 동일 protocol 재측정
+```
+
+추가 원칙:
+
+- best run 하나를 성능 개선의 근거로 사용하지 않는다.
+- median과 spread를 함께 보고 개선 폭이 natural variation보다 충분히 큰지 확인한다.
+- PMU counter 하나를 root cause로 단정하지 않는다.
+- 모델(Amdahl, Gustafson, Roofline)은 실제 시스템의 모든 overhead를 자동으로 포함하는 예측식으로 설명하지 않는다.
+- performance와 correctness를 분리하지 않는다. 실패하거나 다른 계산을 한 run은 성능 통계에 포함하지 않는다.
+- benchmark script는 raw measurement와 exit status, 가능하면 environment metadata를 보존한다.
+
+## 6. Self-check
 
 - 최소 3개 질문을 둔다.
 - 단순 암기보다 차이와 인과관계를 묻는다.
 - 정답은 접을 수 있는 형태로 제공한다.
 
-## 6. 시각화 설계 원칙
+## 7. 시각화 설계 원칙
 
 시각화는 장식이 아니라 개념의 경계, 흐름, 비용 차이를 보여 주는 교재 요소다.
 
@@ -118,9 +144,9 @@ Shell scripting은 운영 자동화의 핵심 학습 대상이다. 최소한 다
 - 장식용 회전, particle, blinking은 줄인다.
 - animation이 멈춰도 정적인 구조만으로 개념을 이해할 수 있어야 한다.
 
-## 7. Quality Pass 완료 기준
+## 8. Quality Pass 완료 기준
 
-현재 Foundation stage부터 다음 schema를 CI에서 요구한다.
+현재 `Foundation`, `System / OS`, `Parallel / Cluster`, `Performance` stage에 다음 schema를 CI에서 요구한다.
 
 ```text
 learningObjectives[]
@@ -131,7 +157,7 @@ selfCheck[]          # question / answer
 
 시각화가 있는 핵심 챕터는 visualization registry와 CI required list에 등록한다. 장문 code lesson은 `content/code-lessons.js`에서 관리하며 language/kind/code와 shell-script shebang을 별도 CI에서 검사한다.
 
-## 8. 진행 방식
+## 9. 진행 방식
 
 62개 챕터를 동시에 얕게 수정하지 않는다. Stage 단위로 앞에서부터 Quality Pass를 완료한다.
 
