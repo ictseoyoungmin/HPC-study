@@ -28,9 +28,12 @@ HPC Study는 62개 chapter / 7개 stage curriculum, navigation/search/pagination
 - [x] Slurm RCA evidence timeline
 - [x] CPU-memory-network-storage-GPU monitoring correlation
 
-## Phase 6 · 교재 운영 품질 — 다음 우선순위
+## Phase 6 · 교재 운영 품질 — 진행 중
 
-- [ ] Linux command 결과 예시를 `command → representative output → 관찰 포인트 → 다음 분기`로 연결
+- [x] Command Evidence 공통 schema/UI/CI 추가
+- [x] 7개 stage의 핵심 17개 chapter에 `command → representative output → 관찰 포인트 → 다음 분기` 1차 연결
+- [ ] 나머지 chapter 중 진단 가치가 높은 command를 같은 evidence 형식으로 확대
+- [ ] 실제 lab/cluster에서 확보한 site-specific output을 별도 provenance와 함께 추가할 수 있는 형식 정의
 - [ ] 용어 glossary를 중앙 registry로 만들고 first-use 정의와 chapter 간 교차 링크 연결
 - [ ] chapter 완료율과 stage별 학습 진행 요약 강화
 - [ ] Quality Pass 완료 chapter의 editorial review checklist를 CI에서 가능한 범위까지 자동화

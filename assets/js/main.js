@@ -5,6 +5,7 @@ import { hasVisualization, mountVisualization } from "./visualizations/index.js"
 import { codeBlockHtml, bindCodeBlocks, looksLikeShellCode } from "./ui/code-block.js";
 import { sourcesForChapter } from "../../content/sources.js";
 import { codeLessonForChapter } from "../../content/code-lessons.js";
+import { commandEvidenceForChapter } from "../../content/command-evidence.js";
 
 const app = document.querySelector("#app");
 let cleanupVisualization = null;
@@ -38,7 +39,15 @@ function searchText(chapter) {
     ...(codeLesson.principles || []).flatMap(item => [item.title, item.text]),
     ...(codeLesson.samples || []).flatMap(sample => [sample.title, sample.filename, sample.description, sample.code])
   ] : [];
-  return [chapter.title, chapter.en, chapter.why, ...(chapter.keywords || []), ...terms, ...sections, ...objectives, ...codeText].join(" ").toLowerCase();
+  const evidenceText = commandEvidenceForChapter(chapter.id).flatMap(item => [
+    item.title,
+    item.command,
+    item.output,
+    item.note,
+    ...(item.read || []).flatMap(point => [point.field, point.meaning]),
+    ...(item.branches || []).flatMap(branch => [branch.when, branch.next])
+  ]);
+  return [chapter.title, chapter.en, chapter.why, ...(chapter.keywords || []), ...terms, ...sections, ...objectives, ...codeText, ...evidenceText].join(" ").toLowerCase();
 }
 
 function groupedFilteredChapters() {
@@ -233,6 +242,51 @@ function commandsHtml(chapter) {
     </section>`;
 }
 
+function commandEvidenceHtml(chapter) {
+  const items = commandEvidenceForChapter(chapter.id);
+  if (!items.length) return "";
+  return `
+    <section class="lesson command-evidence-lesson">
+      <div class="lesson-kicker">출력을 읽고 다음 행동을 결정한다</div>
+      <h2>Command Evidence</h2>
+      <p class="section-intro">아래 출력은 학습용 대표 형식이다. 숫자와 host 이름을 외우지 말고, 어떤 필드가 무엇을 의미하며 결과에 따라 다음 관찰을 어디로 이어갈지를 연습한다.</p>
+      <div class="command-evidence-stack">
+        ${items.map(item => `
+          <article class="command-evidence-card">
+            <header class="command-evidence-head">
+              <strong>${esc(item.title)}</strong>
+              <code>${esc(item.command)}</code>
+            </header>
+            <div class="command-evidence-body">
+              <div class="command-evidence-output">
+                ${codeBlockHtml({
+                  title: "대표 출력 예시",
+                  language: "output",
+                  kind: "output",
+                  code: item.output
+                })}
+              </div>
+              <div class="evidence-grid">
+                <section class="evidence-panel">
+                  <h3>어디를 읽는가</h3>
+                  <ul class="evidence-list">
+                    ${(item.read || []).map(point => `<li><b>${esc(point.field)}</b><span>${esc(point.meaning)}</span></li>`).join("")}
+                  </ul>
+                </section>
+                <section class="evidence-panel">
+                  <h3>다음 분기</h3>
+                  <ul class="evidence-list evidence-branches">
+                    ${(item.branches || []).map(branch => `<li><b>${esc(branch.when)}</b><span>${esc(branch.next)}</span></li>`).join("")}
+                  </ul>
+                </section>
+              </div>
+              ${item.note ? `<p class="evidence-note">${esc(item.note)}</p>` : ""}
+            </div>
+          </article>`).join("")}
+      </div>
+    </section>`;
+}
+
 function labStepHtml(step) {
   if (step && typeof step === "object") {
     if (step.code) {
@@ -347,6 +401,7 @@ async function renderChapter(id) {
     ${exampleHtml(chapter)}
     ${codeLessonHtml(chapter)}
     ${commandsHtml(chapter)}
+    ${commandEvidenceHtml(chapter)}
     ${labHtml(chapter)}
     ${mistakesHtml(chapter)}
     ${selfCheckHtml(chapter)}
