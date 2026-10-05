@@ -1,6 +1,15 @@
 # Change log
 
-프로젝트 내부 구현 기록이다. 사용자-facing 소개와 작업 로그를 분리하기 위해 루트 README에는 상세 변경 이력을 두지 않는다.
+프로젝트 내부 구현 기록이다. 사용자-facing 소개와 작업 로그를 분리하기 위해 루트 README에는 상세 변경 이력을 두지 않는다. 큰 작업의 상세 설계·검수 메모는 `logs/`에 둔다.
+
+## 2026-10-05 · Parallel / Cluster textbook quality pass v2
+
+- Parallel / Cluster 19개 챕터를 설명형 rich schema로 보강하고 CI 품질 기준에 포함했다.
+- OpenMP shared-memory/schedule/hybrid placement를 DOM viewer로 추가했다.
+- MPI broadcast를 tree, allreduce를 non-crossing ring으로 재설계했다.
+- Network/RDMA narrow layout과 parallel filesystem connector를 다시 설계해 text/line collision 위험을 줄였다.
+- OpenMP, Linux man-pages, GCC, CMake, Lmod reference를 source registry와 References에 연결했다.
+- 상세 작업 기록: `logs/2026-10-05-parallel-cluster-quality-pass.md`
 
 ## 2026-10-05 · System / OS textbook quality pass v2
 
