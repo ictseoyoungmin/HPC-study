@@ -1,0 +1,13 @@
+{
+  "name": "hpc-study",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:syntax": "node scripts/check-syntax.mjs",
+    "check:content": "node scripts/validate-content.mjs",
+    "check:imports": "node scripts/validate-imports.mjs",
+    "check:html": "node scripts/validate-html.mjs",
+    "check:theme": "node scripts/validate-theme.mjs",
+    "ci": "npm run check:syntax && npm run check:imports && npm run check:content && npm run check:html && npm run check:theme"
+  }
+}

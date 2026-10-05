@@ -1,5 +1,7 @@
 import { mountCluster3D } from "./cluster3d.js";
-import { hasCanvasLab, mountCanvasLab } from "./canvas-labs.js";
+import { canvasLabIds, hasCanvasLab, mountCanvasLab } from "./canvas-labs.js";
+
+export const visualizationIds = Object.freeze(["cluster-architecture", ...canvasLabIds]);
 
 export function hasVisualization(id) {
   return id === "cluster-architecture" || hasCanvasLab(id);

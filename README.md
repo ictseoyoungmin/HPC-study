@@ -65,33 +65,36 @@ HPC-study/
          └─ canvas-labs.js
 ```
 
-큰 stage는 의미 단위로 다시 나눴습니다. `content/index.js`가 모든 파일을 한 curriculum으로 합치므로 navigation과 pagination에서는 하나의 순서를 유지합니다.
+## CI
 
-## Chapter schema
+`.github/workflows/ci.yml`이 `main` push와 pull request마다 정적 사이트를 검증합니다.
 
-```js
-{
-  id,
-  stage,
-  title,
-  en,
-  level,
-  minutes,
-  env,
-  why,
-  concepts,
-  commands,
-  lab,
-  mistakes,
-  troubleshoot,
-  keywords
-}
+```text
+JavaScript syntax
+→ relative import path
+→ 62 chapter schema / duplicate ID / stage
+→ visualization registry
+→ index.html local assets
+→ Light/Dark semantic theme tokens
 ```
 
-새 챕터를 추가할 때는 해당 content 파일에 객체를 추가하면 검색, navigation, 페이지 번호와 pagination에 자동 반영됩니다.
+로컬에서도 같은 검사를 실행할 수 있습니다.
 
-## 시각화
+```bash
+npm run ci
+```
 
-`assets/js/visualizations/index.js`가 챕터 ID와 시각화 구현을 연결합니다. 콘텐츠와 시각화가 분리되어 있으므로 시각화가 없는 챕터도 동일한 교재 레이아웃을 사용하고, 필요한 챕터에만 인터랙티브 설명을 추가할 수 있습니다.
+GitHub Pages 배포는 기존 `main / (root)` 설정을 그대로 사용합니다. CI는 배포를 대체하는 것이 아니라 깨진 콘텐츠와 모듈이 `main`에 들어오는 것을 조기에 발견하는 역할입니다.
 
-현재 `cluster-architecture`는 Three.js를 사용하며 Three.js는 unpkg CDN에서 동적으로 로드합니다. Canvas 2D 시각화는 외부 라이브러리 없이 실행됩니다.
+## 우선 고도화한 시각화
+
+교재 설명력이 중요한 순서부터 viewer와 본문을 확장했습니다.
+
+1. **클러스터 구조** — Core → CPU/Socket → Node → Cluster를 Three.js 계층 전환으로 설명하고 Memory/NIC/Interconnect 경계를 함께 표시합니다.
+2. **CPU Topology** — Socket, physical Core, SMT logical CPU, thread binding을 하나의 topology에서 비교합니다.
+3. **NUMA** — Local/Remote/First-touch 경로와 CPU affinity ↔ memory placement 관계를 설명합니다.
+4. **MPI** — 두 Compute Node 안의 rank/private memory를 구분하고 P2P/Broadcast/Allreduce의 통신 경계를 비교합니다.
+5. **Slurm** — Submit → PENDING → Allocate → RUNNING → Accounting의 lifecycle을 request/allocation/execution 관점으로 연결합니다.
+6. **Scaling** — Scale-up/down/out/in과 Strong/Weak/Amdahl을 서로 다른 개념으로 분리해 시각화합니다.
+
+각 viewer의 조작 버튼은 viewer toolbar에만 두고, 오른쪽 패널은 개념·경계·성능 해석을 읽는 교재 영역으로 유지합니다.

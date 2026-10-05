@@ -210,3 +210,36 @@ pre{margin:0;padding:15px 16px;background:var(--code);color:var(--code-ink);over
   .scaling-controls,.metric-grid{grid-template-columns:1fr}
   .viz-toolbar{align-items:flex-start;flex-direction:column}
 }
+
+/* Textbook visualization system */
+.textbook-viz .viz-toolbar strong{font-size:15px;line-height:1.4}
+.canvas-stage.textbook{height:480px;min-height:480px}
+.textbook-viz .viz-explain{display:flex;flex-direction:column;min-width:0}
+.textbook-viz .viz-explain h3{font-size:21px;line-height:1.35}
+.textbook-viz .viz-explain p{font-size:16px;line-height:1.72;color:var(--viewer-text)}
+.textbook-viz .viz-explain dt{font-size:13px}
+.textbook-viz .viz-explain dd{font-size:15px;line-height:1.68}
+.viz-note{margin-top:14px;padding:11px 12px;border-left:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--viewer-side));color:var(--viewer-text);font-size:14px;line-height:1.65}
+.viz-note[hidden]{display:none}
+.structure-path{position:absolute;z-index:3;left:12px;top:12px;display:flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid var(--viewer-line);border-radius:6px;background:color-mix(in srgb,var(--viewer-side) 92%,transparent);color:var(--viewer-muted);font-size:11px;pointer-events:none}
+.structure-path span{padding:2px 4px;border-radius:3px}
+.structure-path span.active{background:var(--viz-accent-bg);color:var(--accent);font-weight:700}
+.structure-path i{font-style:normal;color:var(--viewer-line)}
+.three-key{position:absolute;z-index:3;left:12px;bottom:10px;display:flex;flex-wrap:wrap;gap:9px 12px;padding:6px 8px;border:1px solid var(--viewer-line);border-radius:6px;background:color-mix(in srgb,var(--viewer-side) 92%,transparent);pointer-events:none}
+.three-key span{display:flex;align-items:center;gap:5px;color:var(--viewer-muted);font-size:10px}
+.three-key i{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--viewer-line)}
+.three-key .key-core{background:#77c9d1}
+.three-key .key-cpu{background:#4f9faa}
+.three-key .key-memory{background:#5f9275}
+.three-key .key-network{height:3px;background:var(--accent-2)}
+.viz-fallback strong{font-size:16px}
+
+@media(max-width:980px){
+  .canvas-stage.textbook{height:430px;min-height:430px}
+}
+@media(max-width:650px){
+  .canvas-stage.textbook{height:390px;min-height:390px}
+  .textbook-viz .viz-explain p{font-size:15px}
+  .structure-path{right:12px;overflow:hidden;white-space:nowrap}
+  .three-key{display:none}
+}
