@@ -3,6 +3,9 @@ import { chapters as c2 } from "../../../content/chapters/02-system-os.js";
 import { chapters as c3a } from "../../../content/chapters/03-parallel-models.js";
 import { chapters as c3b } from "../../../content/chapters/03-network-storage.js";
 import { chapters as c3c } from "../../../content/chapters/03-toolchain-slurm.js";
+import { enhancements as q3a } from "../../../content/enrichments/03-parallel-models.js";
+import { enhancements as q3b } from "../../../content/enrichments/03-network-storage.js";
+import { enhancements as q3c } from "../../../content/enrichments/03-toolchain-slurm.js";
 import { chapters as c4 } from "../../../content/chapters/04-performance.js";
 import { chapters as c5 } from "../../../content/chapters/05-accelerator.js";
 import { chapters as c6a } from "../../../content/chapters/06-slurm-rca.js";
@@ -10,9 +13,12 @@ import { chapters as c6b } from "../../../content/chapters/06-monitoring-ops.js"
 import { chapters as c6c } from "../../../content/chapters/06-runbooks.js";
 import { chapters as c7 } from "../../../content/chapters/07-expert-practice.js";
 
+const quality3 = Object.freeze({ ...q3a, ...q3b, ...q3c });
+const enrich = list => list.map(chapter => quality3[chapter.id] ? { ...chapter, ...quality3[chapter.id] } : chapter);
+
 export const chapters = [
   ...c1, ...c2,
-  ...c3a, ...c3b, ...c3c,
+  ...enrich(c3a), ...enrich(c3b), ...enrich(c3c),
   ...c4, ...c5,
   ...c6a, ...c6b, ...c6c,
   ...c7
