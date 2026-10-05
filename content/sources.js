@@ -167,6 +167,7 @@ export const chapterReferences = Object.freeze({
   "gpu-memory": ["nvidia-cuda", "amd-rocm"],
   "multi-gpu": ["nvidia-cuda", "amd-rocm"],
   "gpu-profiling": ["nvidia-cuda", "amd-rocm"],
+  "ai-hpc": ["nvidia-cuda", "amd-rocm", "slurm", "openmpi"],
   "containers": ["redhat-docs", "openhpc"]
 });
 
