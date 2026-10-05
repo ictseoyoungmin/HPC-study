@@ -1,0 +1,30 @@
+HPC Study Educational Content License
+
+Except where otherwise noted, the original educational content in this
+repository is licensed under the Creative Commons Attribution 4.0 International
+License (CC BY 4.0).
+
+Canonical license:
+https://creativecommons.org/licenses/by/4.0/
+
+Scope
+-----
+This content license applies to original curriculum text, explanations,
+learning objectives, examples, labs, troubleshooting guidance, and original
+educational diagrams or visual compositions created for HPC Study.
+
+It does not change the license of third-party materials. Third-party works,
+trademarks, quoted material, adapted material, and external documentation keep
+their own licenses and terms. See NOTICE.md and docs/SOURCES.md.
+
+Source code, application logic, stylesheets, build/validation scripts, and the
+code that renders interactive visualizations are licensed separately under the
+MIT License in LICENSE-CODE.
+
+Suggested attribution
+---------------------
+HPC Study contributors, "HPC Study", CC BY 4.0,
+https://github.com/ictseoyoungmin/HPC-study
+
+When sharing an adapted version, indicate that changes were made and provide a
+link to the CC BY 4.0 license as required by the license.
