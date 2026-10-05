@@ -1,0 +1,32 @@
+.gpu-concept-body,.gpu-prof-body,.accelerator-model-body{padding:22px;background:var(--viewer)}
+.gpu-concept-body>header,.gpu-prof-body>header,.accelerator-model-body>header{max-width:900px;margin:0 0 18px}
+.gpu-concept-body h3,.gpu-prof-body h3,.accelerator-model-body h3{margin:0 0 8px;color:var(--viewer-text);font-size:22px;line-height:1.35}
+.gpu-concept-body header p,.gpu-prof-body header p,.accelerator-model-body header p{margin:0;color:var(--viewer-muted);font-size:15px;line-height:1.72}
+.gpu-flow,.accelerator-model-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.gpu-flow-step,.accelerator-model-card{position:relative;display:grid;grid-template-columns:34px minmax(0,1fr);gap:11px;min-width:0;padding:15px;border:1px solid var(--viewer-line);border-radius:7px;background:var(--viewer-side)}
+.gpu-flow-step::after{content:"";position:absolute;right:-13px;top:50%;width:12px;height:1px;background:var(--viewer-line)}
+.gpu-flow-step:last-child::after{display:none}
+.gpu-step-num,.accelerator-model-card>span{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:var(--viz-accent-bg);color:var(--accent);font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace}
+.gpu-flow-step strong,.accelerator-model-card strong{display:block;margin-bottom:5px;color:var(--viewer-text);font-size:15px;line-height:1.35}
+.gpu-flow-step p,.accelerator-model-card p{margin:0 0 8px;color:var(--viewer-muted);font-size:14px;line-height:1.62;overflow-wrap:anywhere}
+.gpu-flow-step small,.accelerator-model-card small{display:block;color:var(--accent);font-size:12px;line-height:1.45;overflow-wrap:anywhere}
+.gpu-concept-note{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;margin-top:14px;padding:13px 14px;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--viewer-side));font-size:14px;line-height:1.65}
+.gpu-concept-note b{color:var(--viewer-text)}
+.gpu-concept-note span{color:var(--viewer-muted)}
+.gpu-prof-timeline{display:grid;gap:12px;padding:14px;border:1px solid var(--viewer-line);border-radius:7px;background:var(--viewer-side);overflow:hidden}
+.gpu-prof-lane{display:grid;grid-template-columns:66px minmax(0,1fr);gap:10px;align-items:center;min-width:0}
+.gpu-prof-lane>strong{color:var(--viewer-text);font-size:13px}
+.gpu-prof-track{position:relative;height:44px;border-radius:6px;background:color-mix(in srgb,var(--viewer-line) 35%,transparent);overflow:hidden}
+.gpu-prof-bar{position:absolute;top:6px;height:32px;display:flex;align-items:center;justify-content:center;min-width:42px;padding:0 6px;border-radius:5px;font:700 11px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--viewer-text);border:1px solid var(--viewer-line)}
+.gpu-prof-bar.cpu{background:color-mix(in srgb,var(--accent-2) 18%,var(--viewer-side))}
+.gpu-prof-bar.copy{background:color-mix(in srgb,var(--warning) 16%,var(--viewer-side))}
+.gpu-prof-bar.gpu{background:color-mix(in srgb,var(--accent) 18%,var(--viewer-side))}
+.gpu-prof-bar.wait{background:color-mix(in srgb,var(--danger) 12%,var(--viewer-side))}
+.gpu-prof-axis{display:flex;justify-content:space-between;padding-left:76px;color:var(--viewer-muted);font:600 11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace}
+.gpu-prof-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.gpu-prof-card-grid article{padding:15px;border:1px solid var(--viewer-line);border-radius:7px;background:var(--viewer-side)}
+.gpu-prof-card-grid strong{display:block;margin-bottom:6px;color:var(--viewer-text);font-size:15px}
+.gpu-prof-card-grid p{margin:0;color:var(--viewer-muted);font-size:14px;line-height:1.65}
+.accelerator-model-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:980px){.gpu-flow{grid-template-columns:repeat(2,minmax(0,1fr))}.gpu-flow-step:nth-child(2n)::after{display:none}.accelerator-model-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.gpu-concept-body,.gpu-prof-body,.accelerator-model-body{padding:16px}.gpu-flow,.accelerator-model-grid,.gpu-prof-card-grid{grid-template-columns:1fr}.gpu-flow-step::after{display:none!important}.gpu-concept-note{grid-template-columns:1fr}.gpu-prof-lane{grid-template-columns:1fr}.gpu-prof-track{height:52px}.gpu-prof-axis{padding-left:0}.gpu-prof-viz .viz-controls,.gpu-concept-viz .viz-controls{width:100%}.gpu-prof-viz .viz-btn,.gpu-concept-viz .viz-btn{flex:1 1 auto}.gpu-prof-bar{top:10px;height:32px;font-size:10px}}
