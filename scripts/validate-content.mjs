@@ -3,7 +3,7 @@ import { visualizationIds } from "../assets/js/visualizations/index.js";
 
 const required = ["id","stage","title","en","level","minutes","env","why","concepts","commands","lab","mistakes","troubleshoot","keywords"];
 const qualityRequired = ["learningObjectives","terms","sections","selfCheck"];
-const qualityStages = new Set(["Foundation", "System / OS", "Parallel / Cluster", "Performance", "Accelerator", "Operations / RCA"]);
+const qualityStages = new Set(["Foundation", "System / OS", "Parallel / Cluster", "Performance", "Accelerator", "Operations / RCA", "Expert Practice"]);
 const errors = [];
 const ids = new Set();
 
@@ -59,7 +59,8 @@ for (const id of [
   "scaling","strong-weak","perf-method","perf-pmu","roofline","debug-tools",
   "gpu-basics","gpu-memory","multi-gpu","gpu-profiling","ai-hpc","containers",
   "slurm-admin","rca-failures","monitoring","node-health","cluster-ops","security",
-  "runbook-pending","runbook-slow","runbook-oom","runbook-io-mpi","runbook-gpu"
+  "runbook-pending","runbook-slow","runbook-oom","runbook-io-mpi","runbook-gpu",
+  "workloads","capacity","regression","ticket-postmortem","roadmap","selftest","reference"
 ]) {
   if (!visualizationIds.includes(id)) errors.push(`Required teaching visualization missing: ${id}`);
 }
