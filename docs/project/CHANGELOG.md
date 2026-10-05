@@ -2,6 +2,19 @@
 
 프로젝트 내부 구현 기록이다. 사용자-facing 소개와 작업 로그를 분리하기 위해 루트 README에는 상세 변경 이력을 두지 않는다. 큰 작업의 상세 설계·검수 메모는 `logs/`에 둔다.
 
+## 2026-10-05 · Performance textbook quality pass v2
+
+- `Performance` 6개 챕터를 `learningObjectives / terms / sections / example / selfCheck` 구조로 보강했다.
+- Scale-up/down/out/in을 resource topology/right-sizing, strong/weak scaling을 problem-size 실험으로 분리해 설명했다.
+- 성능 측정 방법론을 hypothesis → baseline → controlled variables → repetition → correctness → decision의 실험 절차로 재구성했다.
+- perf/PMU는 wall-time regression 확인 → aggregate counter → sampling → source 연결 → 재측정의 profiling ladder로 설명했다.
+- Roofline은 arithmetic intensity, measured roof, ridge point, attainable performance와 실제 achieved performance를 구분하도록 본문을 보강했다.
+- strace/gdb/core dump/memory checker는 symptom-driven debugging ladder로 재구성했다.
+- `performance-method.js`와 `performance-quality.css`를 추가해 측정 방법 / profiling / debugging을 text-safe DOM workflow로 표시한다.
+- `perf-method`와 `perf-pmu`에 반복 benchmark 및 perf profiling Bash script code lesson을 추가했다.
+- Performance stage를 CI rich-schema 품질 기준과 required visualization 목록에 포함했다.
+- 상세 작업 기록: `logs/2026-10-05-performance-quality-pass.md`
+
 ## 2026-10-05 · Code block / shell scripting learning pass
 
 - Bash command를 inline `<code>`가 아니라 language-aware `Bash · 명령` block으로 렌더링하도록 공통 code-block UI를 추가했다.
