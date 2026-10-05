@@ -1,3 +1,4 @@
+import { mountHpcOverview } from "./hpc-overview.js";
 import { mountCpu } from "./cpu-topology.js";
 import { mountNuma } from "./numa.js";
 import { mountMpi } from "./mpi.js";
@@ -15,6 +16,7 @@ import { mountGpuNccl } from "./gpu-nccl.js";
 import { mountRoofline } from "./roofline.js";
 
 const mounts = {
+  "hpc-aa-role": mountHpcOverview,
   "cpu-topology": mountCpu,
   "cache-coherence": mountCacheCoherence,
   "virtual-memory": mountVirtualMemory,
