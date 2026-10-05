@@ -18,6 +18,7 @@ import { mountScientificIo } from "./scientific-io.js";
 import { mountGpuConcepts } from "./gpu-concepts.js";
 import { mountGpuProfiling } from "./gpu-profiling.js";
 import { mountDistributedTraining, mountContainerBoundary } from "./accelerator-models.js";
+import { mountOperationsRca } from "./operations-rca.js";
 import { mountRoofline } from "./roofline.js";
 
 const mounts = {
@@ -52,7 +53,18 @@ const mounts = {
   "multi-gpu": host => mountGpuConcepts(host, "multi"),
   "gpu-profiling": mountGpuProfiling,
   "ai-hpc": mountDistributedTraining,
-  "containers": mountContainerBoundary
+  "containers": mountContainerBoundary,
+  "slurm-admin": host => mountOperationsRca(host, "slurm-admin"),
+  "rca-failures": host => mountOperationsRca(host, "rca-failures"),
+  "monitoring": host => mountOperationsRca(host, "monitoring"),
+  "node-health": host => mountOperationsRca(host, "node-health"),
+  "cluster-ops": host => mountOperationsRca(host, "cluster-ops"),
+  "security": host => mountOperationsRca(host, "security"),
+  "runbook-pending": host => mountOperationsRca(host, "runbook-pending"),
+  "runbook-slow": host => mountOperationsRca(host, "runbook-slow"),
+  "runbook-oom": host => mountOperationsRca(host, "runbook-oom"),
+  "runbook-io-mpi": host => mountOperationsRca(host, "runbook-io-mpi"),
+  "runbook-gpu": host => mountOperationsRca(host, "runbook-gpu")
 };
 
 export const canvasLabIds = Object.freeze(Object.keys(mounts));
