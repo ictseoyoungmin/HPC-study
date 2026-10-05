@@ -3,6 +3,7 @@ import { visualizationIds } from "../assets/js/visualizations/index.js";
 
 const required = ["id","stage","title","en","level","minutes","env","why","concepts","commands","lab","mistakes","troubleshoot","keywords"];
 const qualityRequired = ["learningObjectives","terms","sections","selfCheck"];
+const qualityStages = new Set(["Foundation", "System / OS"]);
 const errors = [];
 const ids = new Set();
 
@@ -25,9 +26,9 @@ chapters.forEach((chapter, index) => {
     errors.push(`${at}: invalid lab schema`);
   }
 
-  if (chapter.stage === "Foundation") {
+  if (qualityStages.has(chapter.stage)) {
     for (const key of qualityRequired) {
-      if (!Array.isArray(chapter[key]) || !chapter[key].length) errors.push(`${at}: Foundation quality pass requires ${key}`);
+      if (!Array.isArray(chapter[key]) || !chapter[key].length) errors.push(`${at}: quality pass requires ${key}`);
     }
     if ((chapter.learningObjectives || []).length < 3) errors.push(`${at}: requires at least 3 learning objectives`);
     if ((chapter.terms || []).length < 5) errors.push(`${at}: requires at least 5 defined terms`);
@@ -51,7 +52,7 @@ for (const id of visualizationIds) {
   if (!ids.has(id)) errors.push(`Visualization points to missing chapter: ${id}`);
 }
 
-for (const id of ["hpc-aa-role","cluster-architecture","cpu-topology","cache-coherence","virtual-memory","numa","mpi-basics","network-basics","rdma-interconnect","network-benchmark","storage-stack","parallel-filesystems","scientific-io","slurm-basics","scaling","strong-weak","gpu-basics","gpu-memory","multi-gpu"]) {
+for (const id of ["hpc-aa-role","cluster-architecture","process-signals","os-control","cpu-topology","cache-coherence","virtual-memory","numa","mpi-basics","network-basics","rdma-interconnect","network-benchmark","storage-stack","parallel-filesystems","scientific-io","slurm-basics","scaling","strong-weak","gpu-basics","gpu-memory","multi-gpu"]) {
   if (!visualizationIds.includes(id)) errors.push(`Required teaching visualization missing: ${id}`);
 }
 
