@@ -13,16 +13,20 @@ index.html
 ├─ content/                      CC BY 4.0 educational data
 │  ├─ chapters/                  62-chapter base curriculum modules
 │  ├─ enrichments/               Quality Pass rich-schema overlays
+│  ├─ code-lessons.js            shell/C/C++/Python/Slurm educational examples
 │  └─ sources.js                 source registry / chapter references
 └─ assets/
    ├─ css/
    │  ├─ app.css                 base UI / theme
    │  ├─ quality-v2.css          rich textbook content / common visual rules
+   │  ├─ code-block.css          language-aware code/script/lab containers
    │  ├─ system-os-v2.css        System / OS DOM viewer layouts
    │  └─ parallel-quality.css    Parallel / Cluster DOM viewer layouts
    └─ js/                        MIT application code
       ├─ main.js                 routing / page rendering
       ├─ core/                   theme / state / curriculum assembly
+      ├─ ui/
+      │  └─ code-block.js        shared code block renderer / copy behavior
       └─ visualizations/         concept-specific viewers
 ```
 
@@ -55,6 +59,21 @@ selfCheck[]
 
 Parallel / Cluster에서는 기존 3개 base module을 유지하면서 `content/enrichments/03-*.js`에 설명형 schema를 분리했다. `assets/js/core/curriculum.js`가 chapter id 기준으로 base object와 enrichment를 merge한다. 이 구조는 대규모 재작성 중에도 기존 명령어/실습/최소 schema를 안정적으로 보존하면서 editorial content를 독립적으로 리뷰하기 위한 전환 구조다. 향후 base module 자체를 rich schema로 통합할 수 있지만, 사용자-facing 결과와 CI 기준은 merge된 최종 chapter object를 기준으로 한다.
 
+`content/code-lessons.js`는 command 한두 줄보다 긴 교육용 code sample을 별도 관리한다. 현재는 diagnostic/utility/automation Bash script를 제공하며 이후 OpenMP/MPI C source, Python 분석 script, Slurm batch script, example output도 같은 schema로 확장한다.
+
+```text
+chapterId
+└─ code lesson
+   ├─ title / intro / principles[]
+   └─ samples[]
+      ├─ id / title
+      ├─ language     bash / c / cpp / python / slurm / text / output
+      ├─ kind         command / script / source / output / config
+      ├─ filename
+      ├─ code
+      └─ description / observe / caution
+```
+
 `assets/js/core/curriculum.js`는 content module을 순서대로 조립하고 enrichment를 합칠 뿐 교재 문장을 직접 보유하지 않는다. Navigation, progress, pagination은 최종 chapter array에서 자동 파생한다.
 
 `content/sources.js`는 외부 reference의 canonical registry와 chapter→source mapping을 관리한다. 페이지의 References는 이 데이터에서 자동 생성한다.
@@ -71,6 +90,7 @@ Header / why
 → Concept summary
 → Visualization
 → Worked example
+→ Code / script lesson (when present)
 → Commands
 → Lab
 → Mistakes / troubleshooting
@@ -79,6 +99,27 @@ Header / why
 ```
 
 아직 Quality Pass 전인 챕터는 기존 최소 schema로도 렌더링된다. Stage를 순차적으로 전환하기 위한 호환 계층이다.
+
+### Code block abstraction
+
+`assets/js/ui/code-block.js`는 code presentation을 한 곳에서 책임진다. Bash command, script, C/C++/Python source, Slurm script, config, sample output을 같은 frame에 넣되 language와 kind를 header에 명시한다.
+
+기존 `command` 데이터도 이 abstraction을 거쳐 `Bash · 명령` block으로 렌더링한다. 실습 step은 prose와 executable code를 구분하며, shell command로 판별되는 기존 문자열 step도 같은 Bash block으로 올려 보여 준다. 이후 신규 실습은 가능하면 object schema를 사용해 language/kind를 명시한다.
+
+```text
+{
+  title,
+  language,
+  kind,
+  filename,
+  code,
+  description,
+  observe,
+  caution
+}
+```
+
+Copy 동작은 HTML attribute에 source string을 다시 넣지 않고 해당 block의 `<code>` text를 읽는다. 따라서 multiline script와 quote가 포함된 source도 별도 escaping 규칙 없이 동일하게 복사할 수 있다.
 
 ### Visualization registry
 
@@ -130,10 +171,11 @@ CSS와 Canvas는 semantic token을 공유한다. Canvas 코드에서 Light/Dark 
 1. 해당 stage의 `content/chapters/` module에 chapter object를 추가한다.
 2. Quality Pass 대상이면 rich schema를 `CONTENT-QUALITY.md` 기준으로 작성한다. 전환 중인 stage는 `content/enrichments/` overlay를 사용할 수 있다.
 3. 필요하면 `content/sources.js`와 `docs/SOURCES.md`에 source를 추가하고 chapter mapping을 연결한다.
-4. 시각화가 필요하면 `assets/js/visualizations/`에 독립 module을 작성한다.
-5. registry에 chapter id를 연결한다.
-6. 핵심 viewer라면 `scripts/validate-content.mjs`의 required visualization 목록을 갱신한다.
-7. `npm run ci`를 통과시킨다.
+4. 장문 script/source 예제가 있으면 `content/code-lessons.js`에 language와 kind를 명시해 추가한다.
+5. 시각화가 필요하면 `assets/js/visualizations/`에 독립 module을 작성한다.
+6. registry에 chapter id를 연결한다.
+7. 핵심 viewer라면 `scripts/validate-content.mjs`의 required visualization 목록을 갱신한다.
+8. `npm run ci`를 통과시킨다.
 
 ## 라이선스 경계
 
@@ -141,7 +183,7 @@ CSS와 Canvas는 semantic token을 공유한다. Canvas 코드에서 Light/Dark 
 - `assets/js/**`, `assets/css/**`, `scripts/**` → MIT
 - `assets/third-party/**` → upstream license
 
-CI는 교재 파일이 다시 `assets/js/content/` 아래로 들어가는 것을 실패로 처리해 이 경계를 유지한다.
+CI는 교재 파일이 다시 `assets/js/content/` 아래로 들어가는 것을 실패로 처리해 이 경계를 유지한다. Educational code sample도 `content/code-lessons.js` 아래에 두므로 presentation code와 라이선스 경계가 섞이지 않는다.
 
 ## 시각화 설계 원칙
 
