@@ -1,4 +1,4 @@
-import { mountCluster3D } from "./cluster3d.js";
+import { mountCluster3D } from "./cluster3d-v2.js";
 import { canvasLabIds, hasCanvasLab, mountCanvasLab } from "./canvas-labs.js";
 
 export const visualizationIds = Object.freeze(["cluster-architecture", ...canvasLabIds]);
