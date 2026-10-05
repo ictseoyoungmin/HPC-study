@@ -15,7 +15,9 @@ import { mountNetworkBenchmark } from "./network-benchmark.js";
 import { mountStorageStack } from "./storage-stack.js";
 import { mountParallelFilesystem } from "./parallel-filesystem.js";
 import { mountScientificIo } from "./scientific-io.js";
-import { mountGpuNccl } from "./gpu-nccl.js";
+import { mountGpuConcepts } from "./gpu-concepts.js";
+import { mountGpuProfiling } from "./gpu-profiling.js";
+import { mountDistributedTraining, mountContainerBoundary } from "./accelerator-models.js";
 import { mountRoofline } from "./roofline.js";
 
 const mounts = {
@@ -45,9 +47,12 @@ const mounts = {
   "perf-pmu": host => mountPerformanceMethod(host, "profile"),
   "roofline": mountRoofline,
   "debug-tools": host => mountPerformanceMethod(host, "debug"),
-  "gpu-basics": host => mountGpuNccl(host, "fundamentals"),
-  "gpu-memory": host => mountGpuNccl(host, "data"),
-  "multi-gpu": host => mountGpuNccl(host, "multi")
+  "gpu-basics": host => mountGpuConcepts(host, "fundamentals"),
+  "gpu-memory": host => mountGpuConcepts(host, "data"),
+  "multi-gpu": host => mountGpuConcepts(host, "multi"),
+  "gpu-profiling": mountGpuProfiling,
+  "ai-hpc": mountDistributedTraining,
+  "containers": mountContainerBoundary
 };
 
 export const canvasLabIds = Object.freeze(Object.keys(mounts));
