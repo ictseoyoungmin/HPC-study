@@ -5,11 +5,12 @@
   "scripts": {
     "check:syntax": "node scripts/check-syntax.mjs",
     "check:content": "node scripts/validate-content.mjs",
+    "check:code-lessons": "node scripts/validate-code-lessons.mjs",
     "check:imports": "node scripts/validate-imports.mjs",
     "check:html": "node scripts/validate-html.mjs",
     "check:theme": "node scripts/validate-theme.mjs",
     "check:docs": "node scripts/validate-docs.mjs",
     "check:licenses": "node scripts/validate-licenses.mjs",
-    "ci": "npm run check:syntax && npm run check:imports && npm run check:content && npm run check:html && npm run check:theme && npm run check:docs && npm run check:licenses"
+    "ci": "npm run check:syntax && npm run check:imports && npm run check:content && npm run check:code-lessons && npm run check:html && npm run check:theme && npm run check:docs && npm run check:licenses"
   }
 }
