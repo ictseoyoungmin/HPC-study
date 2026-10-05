@@ -1,0 +1,33 @@
+.code-block{margin:12px 0;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--surface)}
+.code-block-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 12px;border-bottom:1px solid var(--rule);background:color-mix(in srgb,var(--surface) 92%,var(--paper-2))}
+.code-block-heading{min-width:0;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.code-block-heading strong{font-size:15px;line-height:1.45}
+.code-block-heading span{color:var(--soft);font:600 11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.025em}
+.code-copy-btn{flex:0 0 auto;border:1px solid var(--rule-strong);background:transparent;color:var(--muted);border-radius:5px;padding:5px 9px;font-size:12px;line-height:1.35}
+.code-copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+.code-block-description{padding:10px 13px;border-bottom:1px solid var(--rule);color:var(--muted);font-size:14px;line-height:1.65}
+.code-block-pre{margin:0;padding:0;background:var(--code);color:var(--code-ink);overflow:auto;tab-size:2}
+.code-block-pre code{display:block;min-width:max-content;padding:16px 17px;font:13px/1.72 "SFMono-Regular",Consolas,"Liberation Mono",monospace;white-space:pre}
+.code-block-note{padding:10px 13px;background:var(--surface);color:var(--muted);font-size:14px;line-height:1.65}
+.code-block-note p{display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;margin:0}
+.code-block-note p+p{margin-top:5px}
+.code-block-note b{color:var(--ink)}
+.code-block-note .code-caution b{color:var(--warning)}
+.code-lesson-intro{max-width:var(--reading-narrow);margin-bottom:16px}
+.code-principles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:var(--reading)}
+.code-principle{padding:12px 13px;border-top:2px solid var(--rule-strong);background:var(--surface);font-size:14px;line-height:1.62;color:var(--muted)}
+.code-principle strong{display:block;margin-bottom:4px;color:var(--ink);font-size:14px}
+.code-sample-stack{display:grid;gap:14px;margin-top:18px}
+.lab-steps{display:grid;gap:12px;padding-left:0;list-style:none;counter-reset:lab-step}
+.lab-step{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start;counter-increment:lab-step}
+.lab-step::before{content:counter(lab-step);display:grid;place-items:center;width:26px;height:26px;margin-top:9px;border:1px solid var(--rule-strong);border-radius:50%;color:var(--accent);font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace}
+.lab-step-text{padding:8px 0;font-size:15px;line-height:1.72}
+.lab-step .code-block{margin:0}
+@media(max-width:760px){
+  .code-principles{grid-template-columns:1fr}
+  .code-block-head{align-items:flex-start}
+  .code-block-heading{display:grid;gap:3px}
+  .code-block-pre code{font-size:12px;padding:14px}
+  .lab-step{grid-template-columns:28px minmax(0,1fr);gap:7px}
+  .lab-step::before{width:24px;height:24px}
+}
