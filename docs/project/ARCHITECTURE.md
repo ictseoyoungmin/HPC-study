@@ -16,7 +16,8 @@ index.html
 └─ assets/
    ├─ css/
    │  ├─ app.css                 base UI / theme
-   │  └─ quality-v2.css          textbook-rich content / visual layout rules
+   │  ├─ quality-v2.css          rich textbook content / common visual rules
+   │  └─ system-os-v2.css        System / OS DOM viewer layouts
    └─ js/                        MIT application code
       ├─ main.js                 routing / page rendering
       ├─ core/                   theme / state / curriculum assembly
@@ -45,6 +46,8 @@ example
 selfCheck[]
   question / answer
 ```
+
+현재 `Foundation`과 `System / OS`가 이 rich schema를 CI에서 강제한다. 이후 stage도 Quality Pass가 끝나는 순서대로 같은 검증 집합에 추가한다.
 
 `concepts[]`는 더 이상 본문을 대체하지 않는다. 설명형 본문을 읽은 뒤 핵심을 다시 압축하는 summary로 사용한다.
 
@@ -75,10 +78,11 @@ Header / why
 
 ### Visualization registry
 
-`assets/js/visualizations/canvas-labs.js`는 chapter id와 mount function을 연결한다. 실제 시각화 구현은 주제별 파일로 분리한다.
+`assets/js/visualizations/canvas-labs.js`는 chapter id와 mount function을 연결한다. 이름은 초기 구조의 흔적이지만 DOM viewer와 Canvas viewer를 모두 registry에서 관리한다.
 
 ```text
 hpc-overview.js          DOM-based system map / AA diagnostic map
+system-os-map.js         process model / task state / cgroup / namespace-service DOM maps
 cluster3d-v2.js          Core → Socket → Node → Cluster / central fabric hub
 cpu-topology.js          Socket / Core / SMT / binding
 cache-coherence.js       hierarchy / coherence / false sharing
@@ -110,7 +114,7 @@ Canvas는 다음과 같이 좌표가 의미를 갖는 경우에 우선 사용한
 - dynamic packet / data movement
 - topology whose labels are short and bounded
 
-Network topology에서 교육적 이유가 없는 all-to-all line은 피하고 switch/fabric hub 또는 계층형 connector를 사용한다.
+Network topology에서 교육적 이유가 없는 all-to-all line은 피하고 switch/fabric hub 또는 계층형 connector를 사용한다. System / OS viewer에서는 desktop과 narrow layout을 별도로 두고, narrow 화면에서 두 topology domain을 억지로 가로 배치하지 않는다.
 
 ### Theme
 
