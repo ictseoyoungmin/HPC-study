@@ -86,7 +86,11 @@ export const sources = Object.freeze({
 });
 
 export const chapterReferences = Object.freeze({
+  "hpc-aa-role": ["openhpc"],
   "cluster-architecture": ["linux-kernel", "openhpc"],
+  "linux-files": ["linux-kernel", "redhat-docs"],
+  "shell-text": ["redhat-docs"],
+  "ssh-transfer": ["redhat-docs"],
   "cpu-topology": ["linux-kernel", "intel-sdm", "amd-rocm"],
   "cache-coherence": ["linux-kernel", "intel-sdm"],
   "virtual-memory": ["linux-kernel", "redhat-docs"],
