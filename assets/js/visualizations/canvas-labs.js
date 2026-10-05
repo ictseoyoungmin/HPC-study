@@ -1,6 +1,7 @@
 import { mountHpcOverview } from "./hpc-overview.js";
 import { mountProcessModel, mountOsControl } from "./system-os-map.js";
 import { mountParallelModels } from "./parallel-models.js";
+import { mountPerformanceMethod } from "./performance-method.js";
 import { mountCpu } from "./cpu-topology.js";
 import { mountNuma } from "./numa.js";
 import { mountMpi } from "./mpi.js";
@@ -40,7 +41,10 @@ const mounts = {
   "slurm-resources": mountScheduler,
   "scaling": mountResourceScaling,
   "strong-weak": mountStrongWeak,
+  "perf-method": host => mountPerformanceMethod(host, "method"),
+  "perf-pmu": host => mountPerformanceMethod(host, "profile"),
   "roofline": mountRoofline,
+  "debug-tools": host => mountPerformanceMethod(host, "debug"),
   "gpu-basics": host => mountGpuNccl(host, "fundamentals"),
   "gpu-memory": host => mountGpuNccl(host, "data"),
   "multi-gpu": host => mountGpuNccl(host, "multi")
