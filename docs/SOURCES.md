@@ -4,18 +4,25 @@ This file records major external sources used to verify technical facts in HPC
 Study. The default usage is **reference only**: HPC Study writes its own text,
 examples, labs, diagrams, and visualizations.
 
-License observations were checked on **2026-10-05**. Upstream terms can change,
-and individual files or product documents may have different terms. Verify the
-exact item before copying, adapting, or redistributing it.
+Concrete license observations below were checked on **2026-10-05** where a
+license is explicitly stated. Rows marked **reference-only / verify upstream
+terms** intentionally do not claim a redistribution license. Upstream terms can
+change, and individual files or product documents may have different terms.
+Verify the exact item before copying, adapting, or redistributing it.
 
 | ID | Source | Primary use | Observed license / terms | HPC Study policy |
 | --- | --- | --- | --- | --- |
 | `linux-kernel` | [Linux Kernel Documentation](https://docs.kernel.org/) | Linux memory, NUMA, scheduler, kernel behavior | Kernel source as a whole is GPL-2.0-only; individual source/documentation files can carry compatible or dual SPDX identifiers | `technical-reference`; do not copy text/figures without checking the exact file SPDX/license |
+| `linux-man-pages` | [Linux man-pages](https://man7.org/linux/man-pages/) | pthread/process/socket/Linux command semantics | Reference-only / verify the exact page or distribution notice before reuse | `command-reference`; facts and syscall semantics are independently explained |
+| `openmp-spec` | [OpenMP Specifications](https://www.openmp.org/specifications/) | OpenMP directives, runtime semantics, memory/scheduling model | Reference-only / verify the exact specification notice before reuse | `api-semantics`; no specification text or figures copied into the textbook |
 | `mpi-forum` | [MPI Forum standards](https://www.mpi-forum.org/docs/) | MPI API semantics and terminology | MPI Forum procedures are explicitly CC BY 4.0; verify the copyright/license notice on the specific standard release before reuse | `api-semantics`; standards used as reference, not copied into the textbook |
 | `openmpi` | [Open MPI Documentation](https://docs.open-mpi.org/) | Open MPI behavior, runtime terminology, implementation reference | Open MPI project is distributed under its BSD 3-clause Open MPI variant; copied material should still be checked at file/release level | `technical-reference` / `command-reference` |
 | `mpich` | [MPICH](https://www.mpich.org/) and [official repository](https://github.com/pmodels/mpich) | MPI implementation behavior and examples | MPICH `COPYRIGHT` grants permission to use, reproduce, prepare derivative works, and redistribute, subject to its notice/disclaimer terms | `technical-reference`; preserve upstream notice if material is ever reused |
 | `osu-omb` | [OSU Micro-Benchmarks](https://mvapich.cse.ohio-state.edu/benchmarks/) | MPI latency, bandwidth, and collective microbenchmark behavior | Official benchmark distribution page states that OMB is available under a BSD license | `technical-reference`; benchmark behavior is referenced, not copied into the textbook |
 | `iperf3` | [iperf3](https://software.es.net/iperf/) | TCP/UDP network throughput measurement behavior | iperf3 is released under a three-clause BSD license | `technical-reference`; command behavior is referenced, no upstream code is included |
+| `gcc-docs` | [GCC Online Documentation](https://gcc.gnu.org/onlinedocs/) | compiler options, optimization, linking, sanitizer behavior | Reference-only / verify the exact manual/source notice before reuse | `technical-reference`; compiler behavior is independently summarized |
+| `cmake-docs` | [CMake Documentation](https://cmake.org/documentation/) | build-system terminology and configuration behavior | Reference-only / verify upstream terms before reuse | `technical-reference`; no upstream tutorial text is copied |
+| `lmod-docs` | [Lmod Documentation](https://lmod.readthedocs.io/) | module hierarchy, spider, environment behavior | Reference-only / verify upstream terms before reuse | `technical-reference`; module behavior is independently explained |
 | `slurm` | [SchedMD Slurm Documentation](https://slurm.schedmd.com/) | Slurm commands, scheduling, accounting, resource behavior | Upstream `COPYING` states that Slurm code and documentation are under GNU GPL v2 or later; contrib items can differ | `technical-reference` / `command-reference`; do not copy documentation into CC BY content without compatibility review |
 | `nvidia-cuda` | [NVIDIA CUDA Documentation](https://docs.nvidia.com/cuda/) | CUDA execution model, memory, streams, GPU behavior | CUDA SDK EULA applies to associated documentation; NVIDIA retains rights and redistribution is limited to what the agreement permits | `technical-reference`; no text or diagrams reproduced unless a specific item grants permission |
 | `amd-rocm` | [AMD ROCm Documentation](https://rocm.docs.amd.com/) | HIP/ROCm execution, GPU memory, runtime and tools | Current ROCm top-level repository, which primarily contains documentation, is MIT; individual ROCm components may use separate licenses | `technical-reference`; verify the component repository before reusing component-specific material |
@@ -34,6 +41,24 @@ The kernel documentation explains that the kernel is provided under GPL-2.0-only
 as a whole and that individual files can have other compatible licenses, usually
 expressed with SPDX identifiers. Therefore the license of a specific
 Documentation file must be checked before any direct reuse.
+
+### Linux man-pages
+
+Reference: https://man7.org/linux/man-pages/
+
+HPC Study uses Linux man-pages to verify syscall, pthread, signal, socket, and
+command semantics. This project does not infer a blanket reuse license from the
+website landing page. Any verbatim reuse or adaptation must check the exact
+source/page notice first.
+
+### OpenMP
+
+Reference: https://www.openmp.org/specifications/
+
+The OpenMP specifications are used to verify directive, runtime, scheduling,
+affinity, and memory-model terminology. HPC Study independently rewrites the
+teaching explanation and diagrams. The exact specification notice must be
+checked before any direct quotation, adaptation, or redistribution.
 
 ### MPI Forum
 
@@ -79,6 +104,19 @@ References:
 iperf3 is developed by ESnet / Lawrence Berkeley National Laboratory and is
 released under a three-clause BSD license. HPC Study uses it as a reference for
 active TCP/UDP throughput measurement and does not include upstream code.
+
+### GCC / CMake / Lmod
+
+References:
+
+- https://gcc.gnu.org/onlinedocs/
+- https://cmake.org/documentation/
+- https://lmod.readthedocs.io/
+
+These sources are used for compiler, build-system, loader/environment, and
+module-management semantics. In this pass they are intentionally classified as
+reference-only sources rather than assigning a blanket documentation reuse
+license. Direct reuse must check the exact upstream manual or file terms.
 
 ### Slurm
 
