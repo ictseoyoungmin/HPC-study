@@ -1,0 +1,17 @@
+.operations-viz .operations-body{padding:22px;background:var(--viewer)}
+.operations-viz .operations-body>header{max-width:900px;margin:0 0 18px}
+.operations-viz .operations-body h3{margin:0 0 8px;color:var(--viewer-text);font-size:22px;line-height:1.35}
+.operations-viz .operations-body header p{margin:0;color:var(--viewer-muted);font-size:15px;line-height:1.72}
+.ops-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.ops-card{display:grid;grid-template-columns:36px minmax(0,1fr);gap:11px;min-width:0;padding:15px;border:1px solid var(--viewer-line);border-radius:8px;background:var(--viewer-side)}
+.ops-card>span{width:31px;height:31px;display:grid;place-items:center;border-radius:50%;background:var(--viz-accent-bg);color:var(--accent);font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace}
+.ops-card strong,.ops-lane strong{display:block;color:var(--viewer-text);font-size:15px;line-height:1.4}
+.ops-card p,.ops-lane p{margin:5px 0 0;color:var(--viewer-muted);font-size:14px;line-height:1.62;overflow-wrap:anywhere}
+.ops-card small,.ops-lane small{display:block;margin-top:8px;color:var(--accent);font:700 11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.02em;overflow-wrap:anywhere}
+.ops-lanes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ops-lane{min-width:0;padding:16px;border-left:3px solid var(--accent);border-top:1px solid var(--viewer-line);border-right:1px solid var(--viewer-line);border-bottom:1px solid var(--viewer-line);border-radius:7px;background:var(--viewer-side)}
+.ops-note{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;margin-top:14px;padding:13px 14px;background:color-mix(in srgb,var(--accent) 7%,var(--viewer-side));border-left:3px solid var(--accent);font-size:14px;line-height:1.65}
+.ops-note b{color:var(--viewer-text)}
+.ops-note span{color:var(--viewer-muted);overflow-wrap:anywhere}
+@media(max-width:900px){.ops-flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:660px){.operations-viz .operations-body{padding:16px}.ops-flow,.ops-lanes{grid-template-columns:1fr}.ops-note{grid-template-columns:1fr}.ops-card{grid-template-columns:32px minmax(0,1fr);padding:13px}.operations-viz .operations-body h3{font-size:20px}}

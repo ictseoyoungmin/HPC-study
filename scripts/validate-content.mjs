@@ -3,7 +3,7 @@ import { visualizationIds } from "../assets/js/visualizations/index.js";
 
 const required = ["id","stage","title","en","level","minutes","env","why","concepts","commands","lab","mistakes","troubleshoot","keywords"];
 const qualityRequired = ["learningObjectives","terms","sections","selfCheck"];
-const qualityStages = new Set(["Foundation", "System / OS", "Parallel / Cluster", "Performance", "Accelerator"]);
+const qualityStages = new Set(["Foundation", "System / OS", "Parallel / Cluster", "Performance", "Accelerator", "Operations / RCA"]);
 const errors = [];
 const ids = new Set();
 
@@ -57,7 +57,9 @@ for (const id of [
   "process-signals","os-control","cpu-topology","cache-coherence","virtual-memory","numa",
   "pthreads-openmp","openmp-advanced","hybrid","mpi-basics","network-basics","rdma-interconnect","network-benchmark","storage-stack","parallel-filesystems","scientific-io","slurm-basics",
   "scaling","strong-weak","perf-method","perf-pmu","roofline","debug-tools",
-  "gpu-basics","gpu-memory","multi-gpu","gpu-profiling","ai-hpc","containers"
+  "gpu-basics","gpu-memory","multi-gpu","gpu-profiling","ai-hpc","containers",
+  "slurm-admin","rca-failures","monitoring","node-health","cluster-ops","security",
+  "runbook-pending","runbook-slow","runbook-oom","runbook-io-mpi","runbook-gpu"
 ]) {
   if (!visualizationIds.includes(id)) errors.push(`Required teaching visualization missing: ${id}`);
 }

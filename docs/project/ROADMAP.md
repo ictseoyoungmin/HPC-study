@@ -111,9 +111,23 @@
 - [x] AI/HPC chapter를 기존 NVIDIA/AMD/Slurm/Open MPI source registry에 연결
 - [ ] Accelerator 실제 브라우저 visual QA: 360 / 768 / desktop에서 timeline bar·card spacing 미세 조정
 
+### Operations / RCA — 1차 완료
+
+- [x] Slurm control path를 controller → node daemon → hook/cgroup → accounting 경계로 재작성
+- [x] Segfault / OOM / Hang / Deadlock / Rank Failure를 symptom → first causal event → propagation → impact 흐름으로 재작성
+- [x] Node monitoring을 CPU·memory·storage·network·GPU의 동일 시간축 correlation 중심으로 재작성
+- [x] Node health를 DRAIN → evidence capture → A/B reproduction → validation → RESUME lifecycle로 재작성
+- [x] HA / provisioning / config management / telemetry를 fleet desired-state와 configuration drift 관점으로 재작성
+- [x] Security를 identity → path → ACL/mode → quota/limit → secret boundary 흐름으로 재작성
+- [x] Pending / Slow / OOM / I/O-MPI Hang / Low GPU Utilization runbook을 symptom-driven evidence ladder로 재작성
+- [x] 11개 Operations / RCA chapter에 objectives / 5+ terms / 3+ sections / worked example / self-check 적용
+- [x] Operations / RCA stage를 CI rich-schema 품질 기준에 포함
+- [x] Slurm lifecycle / RCA timeline / monitoring correlation / node lifecycle / runbook viewer를 text-safe responsive DOM layout으로 추가
+- [x] Operations / RCA chapter References를 Linux / Slurm / MPI / GPU 공식 source registry에 연결
+- [ ] Operations / RCA 실제 브라우저 visual QA: 360 / 768 / desktop에서 card·lane spacing 미세 조정
+
 ### 다음 Stage
 
-- [ ] Operations / RCA Quality Pass
 - [ ] Expert Practice Quality Pass
 
 ## Phase 5 · I/O / Diagnostics teaching pass — Quality Pass 이후 재개
@@ -122,8 +136,8 @@
 - [x] Scientific I/O: rank-per-file vs shared file vs collective MPI-IO / HDF5 / staging
 - [x] Network benchmark: message-size latency/bandwidth curve, topology comparison, median/p95
 - [x] GPU profiling: CPU/GPU timeline과 idle gap / overlap / hot-kernel drill-down
-- [ ] Slurm RCA: pending reason / OOM / node failure evidence timeline
-- [ ] Monitoring: CPU-memory-network-storage-GPU time correlation
+- [x] Slurm RCA: pending reason / OOM / node failure evidence timeline
+- [x] Monitoring: CPU-memory-network-storage-GPU time correlation
 
 ## Phase 6 · 교재 운영 품질
 
