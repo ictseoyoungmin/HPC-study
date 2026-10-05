@@ -13,16 +13,20 @@ import { enhancements as q5 } from "../../../content/enrichments/05-accelerator.
 import { chapters as c6a } from "../../../content/chapters/06-slurm-rca.js";
 import { chapters as c6b } from "../../../content/chapters/06-monitoring-ops.js";
 import { chapters as c6c } from "../../../content/chapters/06-runbooks.js";
+import { enhancements as q6a } from "../../../content/enrichments/06-slurm-rca.js";
+import { enhancements as q6b } from "../../../content/enrichments/06-monitoring-ops.js";
+import { enhancements as q6c } from "../../../content/enrichments/06-runbooks.js";
 import { chapters as c7 } from "../../../content/chapters/07-expert-practice.js";
 
 const quality3 = Object.freeze({ ...q3a, ...q3b, ...q3c });
+const quality6 = Object.freeze({ ...q6a, ...q6b, ...q6c });
 const enrich = (list, quality) => list.map(chapter => quality[chapter.id] ? { ...chapter, ...quality[chapter.id] } : chapter);
 
 export const chapters = [
   ...c1, ...c2,
   ...enrich(c3a, quality3), ...enrich(c3b, quality3), ...enrich(c3c, quality3),
   ...enrich(c4, q4), ...enrich(c5, q5),
-  ...c6a, ...c6b, ...c6c,
+  ...enrich(c6a, quality6), ...enrich(c6b, quality6), ...enrich(c6c, quality6),
   ...c7
 ];
 
