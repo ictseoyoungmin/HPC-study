@@ -4,6 +4,8 @@
 
 62개 챕터 curriculum, navigation/search/pagination, Light/Dark theme, 학습 상태 저장, GitHub Pages, CI가 동작한다. 교재 콘텐츠와 코드의 이중 라이선스, source registry, chapter reference 표시, 물리적 content/code 디렉터리 경계도 적용되어 있다.
 
+기능 범위를 더 넓히기보다 **처음부터 읽었을 때 실제 교재로 학습 가능한가**를 우선 기준으로 전환했다. 상세 기준은 `CONTENT-QUALITY.md`에 둔다.
+
 ## Phase 1 · 핵심 구조 시각화 — 완료
 
 - [x] Cluster hierarchy
@@ -31,7 +33,32 @@
 - [x] CI licensing/source metadata 검사
 - [x] 교육 콘텐츠를 `content/`로 이동해 코드/콘텐츠 라이선스 경계를 물리적으로 분리
 
-## Phase 4 · I/O / Diagnostics teaching pass — 진행 중
+## Phase 4 · Content & Visualization Quality Pass v2 — 최우선 진행 중
+
+### Foundation
+
+- [x] `HPC와 Application Analyst의 역할` 설명형 본문 / 용어 / self-check 재작성
+- [x] `클러스터 구조와 서비스 경로` 설명형 본문 재작성
+- [x] Linux 파일·권한·ACL 챕터 재작성
+- [x] Shell·환경변수·텍스트 처리 챕터 재작성
+- [x] SSH·SCP·rsync 챕터 재작성
+- [x] `learningObjectives / terms / sections / selfCheck` rich schema와 renderer 추가
+- [x] Foundation rich schema CI 검증
+- [x] 첫 장에 text-safe DOM system map 추가
+- [x] Cluster 3D의 all-to-all 연결선을 central fabric hub 구조로 교체
+- [ ] Foundation 모바일 360 px / 768 px 레이아웃 실제 시각 검수 및 미세 조정
+
+### 다음 Stage
+
+- [ ] System / OS: process/thread → scheduler/cgroup → virtual memory → topology/cache/NUMA 순서로 본문 재작성
+- [ ] System / OS viewer의 text overflow / connector crossing 전수 점검
+- [ ] Parallel / Cluster Quality Pass
+- [ ] Performance Quality Pass
+- [ ] Accelerator Quality Pass
+- [ ] Operations / RCA Quality Pass
+- [ ] Expert Practice Quality Pass
+
+## Phase 5 · I/O / Diagnostics teaching pass — Quality Pass 이후 재개
 
 - [x] Linux storage stack: page cache → filesystem → block layer → device / shared FS
 - [x] Scientific I/O: rank-per-file vs shared file vs collective MPI-IO / HDF5 / staging
@@ -40,14 +67,13 @@
 - [ ] Slurm RCA: pending reason / OOM / node failure evidence timeline
 - [ ] Monitoring: CPU-memory-network-storage-GPU time correlation
 
-## Phase 5 · 교재 품질
+## Phase 6 · 교재 운영 품질
 
-- [ ] 챕터별 learning objective와 self-check question 추가
 - [ ] Linux command 결과 예시를 실제 출력과 설명으로 연결
-- [ ] 시각화 keyboard accessibility 검토
-- [ ] 모바일 360 px 기준 viewer 레이아웃 점검
-- [ ] 용어 glossary와 교차 링크
+- [ ] 시각화 keyboard accessibility 전수 검토
+- [ ] 용어 glossary와 챕터 간 교차 링크
 - [ ] 챕터 완료율과 stage별 학습 진행 요약
+- [ ] Quality Pass 완료 stage의 editorial review checklist 자동화 범위 검토
 
 ## 유지 원칙
 
