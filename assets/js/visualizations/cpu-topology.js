@@ -1,44 +1,45 @@
-import { css, roundRect, label, box, line, arrow, particle, createLoop, viewerShell, setDetails, activateButton } from "./canvas-utils.js";
+import { css, roundRect, label, box, line, createLoop, viewerShell, setDetails, activateButton } from "./canvas-utils.js";
+
+const details = {
+  topology: {
+    title: "Socket → Core → Logical CPU",
+    body: "Linux가 세는 CPU 번호는 scheduler가 사용할 logical CPU다. SMT가 켜져 있으면 한 physical Core가 둘 이상의 logical CPU를 노출할 수 있으므로 CPU 수와 Core 수를 분리해서 읽어야 한다.",
+    rows: [
+      ["Socket", "여러 Core, cache, memory controller를 포함하는 processor package 단위"],
+      ["Core", "실제 명령을 실행하는 physical compute resource"],
+      ["Logical CPU", "kernel scheduler가 task를 배치하는 hardware-thread 실행 문맥"]
+    ],
+    note: "lscpu -e=CPU,CORE,SOCKET,NODE로 같은 Core의 SMT sibling과 Socket 경계를 확인한다."
+  },
+  smt: {
+    title: "SMT는 Core를 복제하지 않는다",
+    body: "하나의 physical Core 안에 여러 hardware thread가 들어가고 일부 execution resource를 공유한다. workload가 이미 core 자원을 포화시키면 SMT의 이득이 작거나 역효과가 날 수 있다.",
+    rows: [
+      ["공유", "execution units, cache path 등 core 내부 자원의 일부"],
+      ["장점 후보", "한 thread가 사용하지 못하는 pipeline slot을 다른 thread가 활용"],
+      ["주의", "logical CPU 2개를 physical Core 2개로 계산하지 않음"]
+    ],
+    note: "benchmark에는 SMT 상태와 binding을 함께 기록한다."
+  },
+  binding: {
+    title: "Thread placement와 topology를 함께 본다",
+    body: "같은 thread 수라도 한 Socket에 밀집하는지 두 Socket에 분산하는지에 따라 cache와 memory path가 달라진다. 실제 affinity를 확인해야 성능 측정을 재현할 수 있다.",
+    rows: [
+      ["Close", "가까운 Core에 배치해 shared-cache locality를 활용하는 전략 후보"],
+      ["Spread", "Socket/Core에 넓게 분산해 memory bandwidth를 분산하는 전략 후보"],
+      ["확인", "taskset, OMP_PROC_BIND/OMP_PLACES, Slurm --cpu-bind"]
+    ],
+    note: "어떤 binding이 유리한지는 workload와 NUMA 구조에 따라 비교 측정한다."
+  }
+};
 
 export function mountCpu(host) {
-  const details = {
-    topology: {
-      title: "Socket → Core → Logical CPU",
-      body: "운영체제가 세는 CPU 번호와 실제 물리 Core는 같은 개념이 아니다. 한 Socket 안에 여러 Core가 있고, SMT가 켜져 있으면 한 Core가 둘 이상의 logical CPU를 노출할 수 있다.",
-      rows: [
-        ["포함 관계", "Socket은 프로세서 패키지, Core는 실제 계산 자원, logical CPU는 스케줄 가능한 실행 문맥이다."],
-        ["공유 자원", "같은 Core의 SMT sibling은 execution resource를 공유하고, 같은 Socket의 Core는 일부 cache와 memory path를 공유한다."],
-        ["확인", "lscpu -e=CPU,CORE,SOCKET,NODE 로 CPU 번호가 어느 Core와 Socket에 속하는지 읽는다."]
-      ],
-      note: "Slurm의 CPU 수와 OpenMP thread 수를 정할 때 logical CPU와 physical Core를 구분해야 한다."
-    },
-    smt: {
-      title: "SMT는 Core 수를 늘리지 않는다",
-      body: "SMT는 한 물리 Core에 여러 hardware thread를 노출해 pipeline의 유휴 자원을 활용한다. 두 logical CPU가 서로 독립된 Core 두 개가 되는 것은 아니다.",
-      rows: [
-        ["그림에서", "각 Core 안의 두 작은 실행 문맥이 SMT sibling을 나타낸다."],
-        ["성능", "workload가 execution unit, cache, memory bandwidth를 이미 포화시키면 SMT의 이득이 작거나 역효과가 날 수 있다."],
-        ["기록", "benchmark에는 SMT on/off와 binding 정책을 함께 기록한다."]
-      ],
-      note: "CPU(s)=32라고 해서 physical Core가 32개라고 단정하지 않는다."
-    },
-    binding: {
-      title: "Thread placement와 affinity",
-      body: "같은 thread 수라도 어느 Core와 Socket에 배치되느냐에 따라 cache locality와 NUMA 경로가 달라진다. 배치를 고정하면 성능 측정의 재현성도 높아진다.",
-      rows: [
-        ["Close", "가까운 Core에 밀집시키면 공유 cache locality에 유리한 경우가 있다."],
-        ["Spread", "Socket/Core에 넓게 분산하면 memory bandwidth 사용을 분산할 수 있다."],
-        ["관찰", "taskset, OMP_PROC_BIND, OMP_PLACES, Slurm --cpu-bind 결과를 topology와 함께 본다."]
-      ],
-      note: "항상 한 binding이 정답인 것은 아니며 workload와 NUMA 구조에 따라 비교 측정한다."
-    }
-  };
-
   const { canvas, controls } = viewerShell(host, "CPU topology와 SMT",
     `<button class="viz-btn active" data-view="topology">Topology</button>
      <button class="viz-btn" data-view="smt">SMT</button>
      <button class="viz-btn" data-view="binding">Binding</button>`, details.topology);
   let view = "topology";
+
   const click = event => {
     const button = event.target.closest("[data-view]");
     if (!button) return;
@@ -50,59 +51,111 @@ export function mountCpu(host) {
 
   const stop = createLoop(canvas, (ctx, w, h) => {
     ctx.clearRect(0, 0, w, h);
-    const pad = 22;
-    const gap = w < 620 ? 18 : 26;
-    const vertical = w < 620;
-    const socketW = vertical ? w - pad * 2 : (w - pad * 2 - gap) / 2;
-    const socketH = vertical ? (h - 54 - gap) / 2 : h - 64;
-    const positions = vertical
-      ? [{ x: pad, y: 22 }, { x: pad, y: 22 + socketH + gap }]
-      : [{ x: pad, y: 32 }, { x: pad + socketW + gap, y: 32 }];
-
-    positions.forEach((p, socket) => {
-      roundRect(ctx, p.x, p.y, socketW, socketH, 10, css("--viewer-side"), css("--viewer-line"));
-      label(ctx, `Socket ${socket}`, p.x + 14, p.y + 18, { align: "left", size: 12, color: css("--viewer-muted") });
-
-      const llcY = p.y + 36;
-      box(ctx, p.x + 14, llcY, socketW - 28, 28, "Shared LLC / memory controller", { size: 11 });
-
-      const cols = 4;
-      const coreGap = 8;
-      const usableW = socketW - 28;
-      const coreW = (usableW - coreGap * (cols - 1)) / cols;
-      const coreH = Math.max(54, Math.min(78, socketH - 92));
-      const coreY = p.y + 78;
-      for (let c = 0; c < cols; c++) {
-        const x = p.x + 14 + c * (coreW + coreGap);
-        const selected = view === "binding" && socket === 0 && c < 3;
-        roundRect(ctx, x, coreY, coreW, coreH, 7,
-          selected ? css("--viz-accent-bg") : css("--viz-node"),
-          selected ? css("--accent") : css("--viewer-line"));
-        label(ctx, `Core ${socket * 4 + c}`, x + coreW / 2, coreY + 17, { size: 11, maxWidth: coreW - 8 });
-
-        const threadY = coreY + coreH - 18;
-        const threadRadius = Math.min(8, coreW * .11);
-        const centers = [x + coreW * .34, x + coreW * .66];
-        centers.forEach((cx, sibling) => {
-          ctx.beginPath();
-          ctx.fillStyle = view === "smt" || selected ? css("--accent-2") : css("--viewer-line");
-          ctx.arc(cx, threadY, threadRadius, 0, Math.PI * 2);
-          ctx.fill();
-          if (view === "smt") {
-            label(ctx, `CPU${(socket * 4 + c) * 2 + sibling}`, cx, threadY + 17, { size: 9, color: css("--viewer-muted"), maxWidth: coreW / 2 });
-          }
-        });
-        if (selected) label(ctx, `T${c}`, x + coreW / 2, coreY + coreH / 2, { size: 11, color: css("--accent") });
-      }
-
-      label(ctx, "DRAM", p.x + socketW / 2, p.y + socketH - 16, { size: 11, color: css("--viewer-muted") });
-    });
-
-    if (!vertical) {
-      line(ctx, positions[0].x + socketW, h / 2, positions[1].x, h / 2, css("--warning"), 2, true);
-      label(ctx, "socket / NUMA boundary", w / 2, h / 2 - 13, { size: 10, color: css("--warning") });
-    }
+    if (view === "smt") drawSmt(ctx, w, h);
+    else if (view === "binding") drawBinding(ctx, w, h);
+    else drawTopology(ctx, w, h);
   });
 
   return () => { stop(); controls.removeEventListener("click", click); };
+}
+
+function drawTopology(ctx, w, h) {
+  const narrow = w < 620;
+  const pad = 24;
+  const gap = narrow ? 24 : 34;
+  const socketW = narrow ? w - pad * 2 : (w - pad * 2 - gap) / 2;
+  const socketH = narrow ? Math.min(190, (h - pad * 2 - gap) / 2) : h - 78;
+  const positions = narrow
+    ? [{ x: pad, y: 22 }, { x: pad, y: 22 + socketH + gap }]
+    : [{ x: pad, y: 38 }, { x: pad + socketW + gap, y: 38 }];
+
+  positions.forEach((p, s) => drawSocket(ctx, p.x, p.y, socketW, socketH, s));
+
+  if (narrow) {
+    const x = w / 2;
+    const y1 = positions[0].y + socketH;
+    const y2 = positions[1].y;
+    line(ctx, x, y1 + 5, x, y2 - 5, css("--warning"), 2, true);
+    label(ctx, "Socket boundary", x + 10, (y1 + y2) / 2, { align: "left", size: 10, color: css("--warning") });
+  } else {
+    const x1 = positions[0].x + socketW;
+    const x2 = positions[1].x;
+    const y = positions[0].y + socketH * .58;
+    line(ctx, x1 + 5, y, x2 - 5, y, css("--warning"), 2, true);
+    label(ctx, "Socket boundary", w / 2, y - 14, { size: 10, color: css("--warning") });
+  }
+}
+
+function drawSocket(ctx, x, y, w, h, socket) {
+  roundRect(ctx, x, y, w, h, 10, css("--viewer-side"), css("--viewer-line"));
+  label(ctx, `Socket ${socket}`, x + 14, y + 17, { align: "left", size: 12, color: css("--viewer-muted") });
+
+  const innerX = x + 14;
+  const innerW = w - 28;
+  const coreGap = 7;
+  const cols = 4;
+  const coreW = (innerW - coreGap * 3) / 4;
+  const coreY = y + 43;
+  const coreH = Math.max(55, Math.min(72, h * .36));
+
+  for (let c = 0; c < cols; c++) {
+    const cx = innerX + c * (coreW + coreGap);
+    roundRect(ctx, cx, coreY, coreW, coreH, 7, css("--viz-node"), css("--viewer-line"));
+    label(ctx, `C${socket * 4 + c}`, cx + coreW / 2, coreY + 16, { size: 10, maxWidth: coreW - 8 });
+    const cy = coreY + coreH - 17;
+    [0.36, 0.64].forEach((p, i) => {
+      ctx.beginPath();
+      ctx.fillStyle = css(i ? "--accent-2" : "--accent");
+      ctx.arc(cx + coreW * p, cy, Math.min(6, coreW * .10), 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  const sharedY = coreY + coreH + 12;
+  box(ctx, innerX, sharedY, innerW, 30, "Shared LLC / memory controller", { size: 10 });
+  const dramY = y + h - 34;
+  box(ctx, innerX + innerW * .18, dramY, innerW * .64, 24, "Local DRAM", { size: 10 });
+}
+
+function drawSmt(ctx, w, h) {
+  const boxW = Math.min(420, w - 64);
+  const boxH = Math.min(260, h - 100);
+  const x = (w - boxW) / 2;
+  const y = Math.max(44, (h - boxH) / 2 - 10);
+  roundRect(ctx, x, y, boxW, boxH, 12, css("--viewer-side"), css("--accent"));
+  label(ctx, "Physical Core", x + 18, y + 22, { align: "left", size: 13, color: css("--accent") });
+
+  box(ctx, x + 24, y + 52, boxW - 48, 54, "Shared execution resources", { size: 12 });
+  const threadW = (boxW - 62) / 2;
+  box(ctx, x + 24, y + 128, threadW, 74, "Logical CPU A", { accent: true, size: 12 });
+  box(ctx, x + 38 + threadW, y + 128, threadW, 74, "Logical CPU B", { accent: true, size: 12 });
+  line(ctx, x + 24 + threadW / 2, y + 128, x + boxW / 2, y + 106, css("--viewer-line"), 1.5);
+  line(ctx, x + 38 + threadW + threadW / 2, y + 128, x + boxW / 2, y + 106, css("--viewer-line"), 1.5);
+  label(ctx, "2 scheduler contexts · 1 physical Core", w / 2, y + boxH - 22, { size: 11, color: css("--viewer-muted"), maxWidth: boxW - 30 });
+}
+
+function drawBinding(ctx, w, h) {
+  const narrow = w < 620;
+  const pad = 26;
+  const socketW = narrow ? w - pad * 2 : (w - pad * 2 - 26) / 2;
+  const socketH = narrow ? 150 : 220;
+  const positions = narrow
+    ? [{ x: pad, y: 48 }, { x: pad, y: 48 + socketH + 22 }]
+    : [{ x: pad, y: 86 }, { x: pad + socketW + 26, y: 86 }];
+
+  label(ctx, "Example placement: spread across two sockets", w / 2, 28, { size: 12, color: css("--viewer-muted"), maxWidth: w - 40 });
+
+  positions.forEach((p, s) => {
+    roundRect(ctx, p.x, p.y, socketW, socketH, 10, css("--viewer-side"), css("--viewer-line"));
+    label(ctx, `Socket ${s}`, p.x + 14, p.y + 18, { align: "left", size: 11, color: css("--viewer-muted") });
+    const gap = 8;
+    const coreW = (socketW - 28 - gap * 3) / 4;
+    for (let c = 0; c < 4; c++) {
+      const x = p.x + 14 + c * (coreW + gap);
+      const y = p.y + 48;
+      box(ctx, x, y, coreW, 56, `C${s * 4 + c}`, { accent: true, size: 11 });
+      label(ctx, `T${s * 4 + c}`, x + coreW / 2, y + 39, { size: 9, color: css("--accent") });
+    }
+    box(ctx, p.x + 18, p.y + socketH - 38, socketW - 36, 24, "Local DRAM", { size: 10 });
+  });
 }
